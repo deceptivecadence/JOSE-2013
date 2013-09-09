@@ -79,7 +79,29 @@ function shellInit() {
     sc.description = "<string> - Sets the prompt.";
     sc.function = shellPrompt;
     this.commandList[this.commandList.length] = sc;
-
+    
+    //date
+    sc = new ShellCommand();
+    sc.command = "date";
+    sc.description = "Displays current date and time"
+    sc.function = shellDate;
+    this.commandList[this.commandList.length] = sc;
+    
+    //whereami
+    sc = new ShellCommand();
+    sc.command = "whereami";
+    sc.description = "Shows current Latitude/Longitude"
+    sc.function = shellWhereAmI;
+    this.commandList[this.commandList.length] = sc;
+    
+    //translate
+    sc = new ShellCommand();
+    sc.command = "translate";
+    sc.description = "translates text"
+    sc.function = shellWhereAmI;
+    this.commandList[this.commandList.length] = sc;
+    
+    
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -258,7 +280,9 @@ function shellApology()
 
 function shellVer(args)
 {
-    _StdIn.putText(APP_NAME + " version " + APP_VERSION);    
+    _StdIn.putText(APP_NAME + " version " + APP_VERSION);
+    _StdIn.advanceLine();
+    _StdIn.putText("Revision Date: " + REVISION_DATE);
 }
 
 function shellHelp(args)
@@ -360,4 +384,13 @@ function shellPrompt(args)
     {
         _StdIn.putText("Usage: prompt <string>  Please supply a string.");
     }
+}
+
+function shellDate(args){
+    date = Date();
+    _StdIn.putText(date);
+}
+
+function shellWhereAmI(args){
+    _StdIn.putText("On Earth ya bimbo");
 }

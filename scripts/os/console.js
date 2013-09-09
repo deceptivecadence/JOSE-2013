@@ -45,8 +45,16 @@ function CLIconsole() {
                this.buffer = "";
            }
            // TODO: Write a case for Ctrl-C.
-           else
-           {
+           else if (chr == String.fromCharCode(8)){
+                this.CurrentXPosition = 0;
+                prevChar = this.buffer.substring(this.buffer.length-1,this.buffer.length);
+                this.clearLine(prevChar);
+                this.buffer = this.buffer.substring(0,this.buffer.length-1);
+                _OsShell.putPrompt();
+                this.putText(this.buffer.substring(this.buffer));
+                //this.putText(this.buffer);
+           }
+           else{
                // This is a "normal" character, so ...
                // ... draw it on the screen...
                this.putText(chr);
@@ -55,7 +63,11 @@ function CLIconsole() {
            }
        }
     };
-
+    
+    this.clearLine = function(text){
+        var offset = _DrawingContext.measureText(this.CurrentFont, this.CurrentFontSize, text);
+        _DrawingContext.clearRect(0, this.CurrentYPosition - (_DefaultFontSize + _FontHeightMargin)+1, _Canvas.width, _DefaultFontSize + _FontHeightMargin+5);
+    }
     this.putText = function(text) {
        // My first inclination here was to write two functions: putChar() and putString().
        // Then I remembered that JavaScript is (sadly) untyped and it won't differentiate

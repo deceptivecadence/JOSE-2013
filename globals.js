@@ -11,8 +11,9 @@
 //
 // Global CONSTANTS
 //
-var APP_NAME = "AlanBBOS";  // 'cause I was at a loss for a better name.
-var APP_VERSION = "0.07";   // What did you expect?
+var APP_NAME = "JOSE";
+var APP_VERSION = "0.01";
+var REVISION_DATE = "Sept 9th, 2013"
 
 var CPU_CLOCK_INTERVAL = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
