@@ -90,6 +90,7 @@ function hostBtnStartOS_click(btn)
     _hardwareClockID = setInterval(hostClockPulse, CPU_CLOCK_INTERVAL);
     // .. and call the OS Kernel Bootstrap routine.
     krnBootstrap();
+
 }
 
 function hostBtnHaltOS_click(btn)

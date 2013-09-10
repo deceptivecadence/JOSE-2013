@@ -10,7 +10,10 @@
    <title>
       JOSE - the Javascript Operating System Extravaganza
    </title>
-
+   
+   <!--Adds jQuery-->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
    <script type="text/javascript" src="globals.js"></script>	
 
@@ -36,7 +39,7 @@
 
 <body onload="hostInit();">
 
-<div id="divMain" style="width:100%;">
+<div id="divMain" style="margin-left: 200px;">
 
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
@@ -65,7 +68,24 @@
              tabindex="2"
              onclick="hostBtnReset_click(this);">
    </div>
-
+   
+   <div id="divStatusTotal">
+      <div id="divTime">
+         <canvas id="time"
+                 width="300px"
+                 height=20px">
+            
+         </canvas>
+      </div>
+      <div id="divStatus">
+         <canvas id="status"
+                 width="715px"
+                 height=20px">
+            
+         </canvas>
+      </div>
+   </div>
+   
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
       <canvas id="display"
               width="500px"

@@ -35,3 +35,14 @@ function rot13(str) {   // An easy-to understand implementation of the famous an
     }
     return retVal;
 }
+
+function updateTime(){
+	timeCanvas = document.getElementById('time')
+	timeContext = timeCanvas.getContext('2d');
+	timeContext.clearRect(0,0,300,20);
+	var date = Date()
+	date = date.toString();
+	date = date.slice(0,date.length-24);
+	timeContext.font = "15px Arial"
+	timeContext.fillText(date,3,15);
+}

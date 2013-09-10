@@ -30,6 +30,22 @@ h3 {
 	font-style: normal;	
 }
 
+#divTime{
+   display: inline-block;
+   background-color: #DFDBC3;
+   visibility: visible;
+   border:  2px solid red;
+   margin-left: 4px;
+}
+
+#divStatus{
+   display: inline-block;
+   background-color: #DFDBC3;
+   visibility: visible;
+   border:  2px solid red;
+}
+
+
 #display {
 	background-color:#DFDBC3;
 	border: 2px solid red; 

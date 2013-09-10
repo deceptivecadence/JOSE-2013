@@ -45,6 +45,7 @@ function CLIconsole() {
                this.buffer = "";
            }
            // TODO: Write a case for Ctrl-C.
+           //backspace handler
            else if (chr == String.fromCharCode(8)){
                 this.CurrentXPosition = 0;
                 prevChar = this.buffer.substring(this.buffer.length-1,this.buffer.length);
@@ -57,7 +58,7 @@ function CLIconsole() {
            else{
                // This is a "normal" character, so ...
                // ... draw it on the screen...
-               console.log(chr);
+               //console.log(chr);
                this.putText(chr);
                // ... and add it to our buffer.
                this.buffer += chr;

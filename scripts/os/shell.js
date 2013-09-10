@@ -101,6 +101,12 @@ function shellInit() {
     sc.function = shellWhereAmI;
     this.commandList[this.commandList.length] = sc;
     
+    //status
+    sc = new ShellCommand();
+    sc.command = "status";
+    sc.description = "set display bar text"
+    sc.function = shellStatus;
+    this.commandList[this.commandList.length] = sc;
     
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
@@ -393,4 +399,13 @@ function shellDate(args){
 
 function shellWhereAmI(args){
     _StdIn.putText("On Earth ya bimbo");
+}
+
+function shellStatus(args){
+    statusCanvas = document.getElementById('status')
+    statusContext = statusCanvas.getContext('2d');
+    statusContext.clearRect(0,0,715,20);
+    statusContext.font = "15px Arial"
+    statusContext.fillText(args[0],3,15);
+    //console.log("wibbity wabbity");
 }
