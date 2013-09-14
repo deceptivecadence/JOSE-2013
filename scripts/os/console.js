@@ -88,7 +88,17 @@ function CLIconsole() {
 
     this.advanceLine = function() {
        this.CurrentXPosition = 0;
-       this.CurrentYPosition += _DefaultFontSize + _FontHeightMargin;
-       // TODO: Handle scrolling.
+       
+       if (this.CurrentYPosition >= 481){
+            $('#display').translateCanvas({
+                translateX: 0, translateY: _Canvas.height - this.CurrentYPosition
+            })
+            this.CurrentYPosition = this.CurrentYPosition;
+       }else{
+            this.CurrentYPosition += _DefaultFontSize + _FontHeightMargin;
+       }
+       
+       
+       
     };
 }

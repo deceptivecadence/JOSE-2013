@@ -152,7 +152,7 @@ function shellHandleInput(buffer)
         }
     }
     if (found)
-    {
+    {      
         this.execute(fn, args);
     }
     else
@@ -406,6 +406,11 @@ function shellStatus(args){
     statusContext = statusCanvas.getContext('2d');
     statusContext.clearRect(0,0,715,20);
     statusContext.font = "15px Arial"
-    statusContext.fillText(args[0],3,15);
+    if (typeof args[0] == "undefined"){
+        statusContext.fillText("",3,15);
+    }else{
+        statusContext.fillText(args.join(" "),3,15);
+    }
+    
     //console.log("wibbity wabbity");
 }
