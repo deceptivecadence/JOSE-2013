@@ -15,7 +15,7 @@ function CLIconsole() {
     this.CurrentYPosition = _DefaultFontSize;
     this.buffer           = "";
     this.bufferHistory    = new Array();
-    this.bufferIndex      = this.bufferHistory.length - 1;
+    this.bufferIndex      = 0;
     
     // Methods
     this.init = function() {
@@ -45,6 +45,7 @@ function CLIconsole() {
                _OsShell.handleInput(this.buffer);
                // ... and reset our buffer.
                this.bufferHistory.push(this.buffer);
+               this.bufferIndex = this.bufferHistory.length - 1;
                this.buffer = "";
            }
            // TODO: Write a case for Ctrl-C.
@@ -60,16 +61,24 @@ function CLIconsole() {
            }
            else if (chr === String.fromCharCode(38)){
                 if (this.bufferIndex != 0){
+                    this.CurrentXPosition = 0;
+                    this.clearLine("");
+                    _OsShell.putPrompt();
                     var prevCommand = this.bufferHistory[this.bufferIndex];
                     this.bufferIndex = this.bufferIndex - 1;
+                    this.buffer = prevCommand;
                     this.putText(prevCommand);
                 }
            }
            else if (chr === String.fromCharCode(40)){
                 if (this.bufferIndex != (this.bufferHistory.length - 1)){
+                    this.CurrentXPosition = 0;
+                    this.clearLine("");
+                    _OsShell.putPrompt();
                     this.bufferIndex = this.bufferIndex + 1;
-                    var prevCommand = this.bufferHistory[this.bufferIndex];
-                    this.putText(prevCommand);
+                    var nextCommand = this.bufferHistory[this.bufferIndex];
+                    this.buffer = nextCommand;
+                    this.putText(nextCommand);
                 }
            }
            else{
