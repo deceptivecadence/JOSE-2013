@@ -88,12 +88,14 @@ function CLIconsole() {
 
     this.advanceLine = function() {
        this.CurrentXPosition = 0;
-       
+       var oldY = this.CurrentYPosition;
        if (this.CurrentYPosition >= 481){
-            $('#display').translateCanvas({
-                translateX: 0, translateY: _Canvas.height - this.CurrentYPosition
-            })
-            this.CurrentYPosition = this.CurrentYPosition;
+            var data = _DrawingContext.getImageData(0,0,_Canvas.width,_Canvas.height);
+            this.clearScreen();
+            this.resetXY();
+            //d_DrawingContext.translate(0,oldY - _Canvas.height);
+            //_DrawingContext.putImageData(data,0,0);
+            //this.CurrentYPosition = this.CurrentYPosition;
        }else{
             this.CurrentYPosition += _DefaultFontSize + _FontHeightMargin;
        }
