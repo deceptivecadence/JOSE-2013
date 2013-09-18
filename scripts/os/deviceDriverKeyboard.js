@@ -51,7 +51,9 @@ function krnKbdDispatchKeyPress(params)
     else if ( ((keyCode >= 48) && (keyCode <= 57)) ||   // digits 
                (keyCode == 32)                     ||   // space
                (keyCode == 13)                     ||   // enter
-               (keyCode == 8)                      ||     //backspace
+               (keyCode == 8)                      ||   //backspace
+               (keyCode == 38)                     ||   //up arrow
+               (keyCode == 40)                     ||   //down arrow
                (keyCode == 188 || keyCode == 190))  //punctuation
     {
         if (isShifted && keyCode == 49){

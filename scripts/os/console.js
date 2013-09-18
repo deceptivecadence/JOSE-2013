@@ -13,7 +13,9 @@ function CLIconsole() {
     this.CurrentFontSize  = _DefaultFontSize;
     this.CurrentXPosition = 0;
     this.CurrentYPosition = _DefaultFontSize;
-    this.buffer = "";
+    this.buffer           = "";
+    this.bufferHistory    = new Array();
+    this.bufferIndex      = this.bufferHistory.length - 1;
     
     // Methods
     this.init = function() {
@@ -42,11 +44,12 @@ function CLIconsole() {
                // ... tell the shell ...
                _OsShell.handleInput(this.buffer);
                // ... and reset our buffer.
+               this.bufferHistory.push(this.buffer);
                this.buffer = "";
            }
            // TODO: Write a case for Ctrl-C.
            //backspace handler
-           else if (chr == String.fromCharCode(8)){
+           else if (chr === String.fromCharCode(8)){
                 this.CurrentXPosition = 0;
                 prevChar = this.buffer.substring(this.buffer.length-1,this.buffer.length);
                 this.clearLine(prevChar);
@@ -54,6 +57,20 @@ function CLIconsole() {
                 _OsShell.putPrompt();
                 this.putText(this.buffer.substring(this.buffer));
                 //this.putText(this.buffer);
+           }
+           else if (chr === String.fromCharCode(38)){
+                if (this.bufferIndex != 0){
+                    var prevCommand = this.bufferHistory[this.bufferIndex];
+                    this.bufferIndex = this.bufferIndex - 1;
+                    this.putText(prevCommand);
+                }
+           }
+           else if (chr === String.fromCharCode(40)){
+                if (this.bufferIndex != (this.bufferHistory.length - 1)){
+                    this.bufferIndex = this.bufferIndex + 1;
+                    var prevCommand = this.bufferHistory[this.bufferIndex];
+                    this.putText(prevCommand);
+                }
            }
            else{
                // This is a "normal" character, so ...
@@ -65,7 +82,7 @@ function CLIconsole() {
            }
        }
     };
-    
+
     this.clearLine = function(text){
         var offset = _DrawingContext.measureText(this.CurrentFont, this.CurrentFontSize, text);
         _DrawingContext.clearRect(0, this.CurrentYPosition - (_DefaultFontSize + _FontHeightMargin)+1, _Canvas.width, _DefaultFontSize + _FontHeightMargin+5);
@@ -89,13 +106,15 @@ function CLIconsole() {
     this.advanceLine = function() {
        this.CurrentXPosition = 0;
        var oldY = this.CurrentYPosition;
-       if (this.CurrentYPosition >= 481){
+       // console.log(this.CurrentYPosition);
+       if (this.CurrentYPosition >= 489){
             var data = _DrawingContext.getImageData(0,0,_Canvas.width,_Canvas.height);
             this.clearScreen();
             this.resetXY();
-            //d_DrawingContext.translate(0,oldY - _Canvas.height);
-            //_DrawingContext.putImageData(data,0,0);
-            //this.CurrentYPosition = this.CurrentYPosition;
+            var spacing = _DefaultFontSize + _FontHeightMargin;
+            var distance = spacing * 13 * -1;//worst case-most lines currently a command (help) needs
+            _DrawingContext.putImageData(data,0,distance)
+            this.CurrentYPosition = oldY + distance + spacing //distance is negative
        }else{
             this.CurrentYPosition += _DefaultFontSize + _FontHeightMargin;
        }

@@ -94,17 +94,17 @@ function shellInit() {
     sc.function = shellWhereAmI;
     this.commandList[this.commandList.length] = sc;
     
-    //translate
-    sc = new ShellCommand();
-    sc.command = "translate";
-    sc.description = "translates text"
-    sc.function = shellWhereAmI;
-    this.commandList[this.commandList.length] = sc;
+    // //translate
+    // sc = new ShellCommand();
+    // sc.command = "translate";
+    // sc.description = "translates text"
+    // sc.function = shellWhereAmI;
+    // this.commandList[this.commandList.length] = sc;
     
     //status
     sc = new ShellCommand();
     sc.command = "status";
-    sc.description = "set display bar text"
+    sc.description = "<string> set display bar text"
     sc.function = shellStatus;
     this.commandList[this.commandList.length] = sc;
     
