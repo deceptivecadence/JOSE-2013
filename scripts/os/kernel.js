@@ -131,6 +131,9 @@ function krnInterruptHandler(irq, params)    // This is the Interrupt Handler Ro
             krnKeyboardDriver.isr(params);   // Kernel mode device driver
             _StdIn.handleInput();
             break;
+        case INVALID_KEYBOARD_INPUT_IRQ:
+            osTrapError(params);
+            break;
         default: 
             krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
     }
@@ -192,4 +195,9 @@ function krnTrapError(msg)
     $('html').append("<p style='text-decoration: none; text-align: center; font-size:x-large'>RAVE SCREEN OF DEATH</p>");
     $('html').attr("style", "background-size: 100%; background-image: " + IMAGE)
     krnShutdown();
+}
+
+function osTrapError(params)
+{
+    hostLog("Not a valid keyboard input: " + params);
 }

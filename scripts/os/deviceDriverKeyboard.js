@@ -56,19 +56,32 @@ function krnKbdDispatchKeyPress(params)
                (keyCode == 40)                     ||   //down arrow
                (keyCode == 188 || keyCode == 190))  //punctuation
     {
-        if (isShifted && keyCode == 49){
-            keyCode = 33;
-        }
-        else if (keyCode == 188){
+        if (keyCode == 188){
             keyCode = 44;
         }
         else if (keyCode == 190){
             keyCode = 46;
         }
-        else if (isShifted && keyCode == 54){
-            keyCode = 94;
+
+        if (isShifted){
+            switch (keyCode){
+                case 48: keyCode = 41; break;
+                case 49: keyCode = 33; break;
+                case 50: keyCode = 64; break;
+                case 51: keyCode = 35; break;
+                case 52: keyCode = 36; break;
+                case 53: keyCode = 37; break;
+                case 54: keyCode = 94; break;
+                case 55: keyCode = 38; KEYCODE_HISTORY_CONFLICT = true; break;
+                case 56: keyCode = 42; break;
+                case 57: keyCode = 40; KEYCODE_HISTORY_CONFLICT = true; break;
+            }
         }
+
         chr = String.fromCharCode(keyCode);
         _KernelInputQueue.enqueue(chr); 
+    }
+    else{
+        _KernelInterruptQueue.enqueue( new Interrupt(INVALID_KEYBOARD_INPUT_IRQ, params) );
     }
 }

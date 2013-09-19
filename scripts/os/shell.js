@@ -423,7 +423,7 @@ function shellStatus(args){
 
 function shellTrap(args){
     var params = new Array("", "");
-    _KernelInterruptQueue.enqueue( new Interrupt(CLICK_IRQ, params) );
+    _KernelInterruptQueue.enqueue( new Interrupt(KTRAP_IRQ, params) );
 }
 
 function shellLoad(args){

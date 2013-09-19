@@ -59,7 +59,7 @@ function CLIconsole() {
                 this.putText(this.buffer.substring(this.buffer));
                 //this.putText(this.buffer);
            }
-           else if (chr === String.fromCharCode(38)){
+           else if (chr === String.fromCharCode(38) && !KEYCODE_HISTORY_CONFLICT){
                 if (this.bufferIndex != 0){
                     this.CurrentXPosition = 0;
                     this.clearLine("");
@@ -70,7 +70,7 @@ function CLIconsole() {
                     this.putText(prevCommand);
                 }
            }
-           else if (chr === String.fromCharCode(40)){
+           else if (chr === String.fromCharCode(40) && !KEYCODE_HISTORY_CONFLICT){
                 if (this.bufferIndex != (this.bufferHistory.length - 1)){
                     this.CurrentXPosition = 0;
                     this.clearLine("");
