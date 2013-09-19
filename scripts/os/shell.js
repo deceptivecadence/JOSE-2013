@@ -94,12 +94,6 @@ function shellInit() {
     sc.function = shellWhereAmI;
     this.commandList[this.commandList.length] = sc;
     
-    // //translate
-    // sc = new ShellCommand();
-    // sc.command = "translate";
-    // sc.description = "translates text"
-    // sc.function = shellWhereAmI;
-    // this.commandList[this.commandList.length] = sc;
     
     //status
     sc = new ShellCommand();
@@ -113,6 +107,12 @@ function shellInit() {
     sc.command = "ktrap";
     sc.description = " - creates a kernal trap"
     sc.function = shellTrap;
+    this.commandList[this.commandList.length] = sc;
+
+    sc = new ShellCommand();
+    sc.command = "load";
+    sc.description = " - loads program hex"
+    sc.function = shellLoad;
     this.commandList[this.commandList.length] = sc;
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
@@ -426,3 +426,14 @@ function shellTrap(args){
     _KernelInterruptQueue.enqueue( new Interrupt(CLICK_IRQ, params) );
 }
 
+function shellLoad(args){
+    var text = $('#taProgramInput').val();
+    text = text.toUpperCase();
+    console.log(text);
+    var results = text.match(/[ABCDEF][ABCDEF]|[ABCDEF]\d|\d\d/g);
+    if(results === null){
+        _StdIn.putText("INVALID HEX");
+    }else{
+        _StdIn.putText("VALID HEX");
+    }
+}
