@@ -14,12 +14,13 @@
 var APP_NAME = "JOSE";
 var APP_VERSION = "0.01";
 var REVISION_DATE = "Sept 9th, 2013"
-
+var IMAGE = "url(http://24.media.tumblr.com/tumblr_m4po0153Ly1r3rwuuo1_400.gif)";
 var CPU_CLOCK_INTERVAL = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
 var TIMER_IRQ = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
                     // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
-var KEYBOARD_IRQ = 1;  
+var KEYBOARD_IRQ = 1;
+var CLICK_IRQ = 2;   
 
 
 //

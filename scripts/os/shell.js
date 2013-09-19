@@ -90,7 +90,7 @@ function shellInit() {
     //whereami
     sc = new ShellCommand();
     sc.command = "whereami";
-    sc.description = "Shows current Latitude/Longitude"
+    sc.description = "- Shows current Latitude/Longitude"
     sc.function = shellWhereAmI;
     this.commandList[this.commandList.length] = sc;
     
@@ -108,6 +108,12 @@ function shellInit() {
     sc.function = shellStatus;
     this.commandList[this.commandList.length] = sc;
     
+    //trap
+    sc = new ShellCommand();
+    sc.command = "ktrap";
+    sc.description = " - creates a kernal trap"
+    sc.function = shellTrap;
+    this.commandList[this.commandList.length] = sc;
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -414,3 +420,9 @@ function shellStatus(args){
     
     //console.log("wibbity wabbity");
 }
+
+function shellTrap(args){
+    var params = new Array("", "");
+    _KernelInterruptQueue.enqueue( new Interrupt(CLICK_IRQ, params) );
+}
+

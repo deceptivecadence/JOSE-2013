@@ -185,6 +185,11 @@ function krnTrace(msg)
 function krnTrapError(msg)
 {
     hostLog("OS ERROR - TRAP: " + msg);
-    // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
+    krnShutdown();
+    // Stop the JavaScript interval that's simulating our clock pulse.
+    clearInterval(_hardwareClockID); 
+    $('body').remove();
+    $('html').append("<p style='text-decoration: none; text-align: center; font-size:x-large'>RAVE SCREEN OF DEATH</p>");
+    $('html').attr("style", "background-size: 100%; background-image: " + IMAGE)
     krnShutdown();
 }

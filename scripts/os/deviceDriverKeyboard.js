@@ -65,6 +65,9 @@ function krnKbdDispatchKeyPress(params)
         else if (keyCode == 190){
             keyCode = 46;
         }
+        else if (isShifted && keyCode == 54){
+            keyCode = 94;
+        }
         chr = String.fromCharCode(keyCode);
         _KernelInputQueue.enqueue(chr); 
     }
