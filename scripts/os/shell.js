@@ -430,7 +430,7 @@ function shellLoad(args){
     var text = $('#taProgramInput').val();
     text = text.toUpperCase();
     console.log(text);
-    var results = text.match(/[ABCDEF][ABCDEF]|[ABCDEF]\d|\d\d/g);
+    var results = text.match(/[ABCDEF][ABCDEF]|[ABCDEF]\d|\d[ABCDEF]|\d\d/g);
     if(results === null){
         _StdIn.putText("INVALID HEX");
     }else{
