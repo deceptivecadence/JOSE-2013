@@ -433,7 +433,8 @@ function shellLoad(args){
     var results = text.match(/[ABCDEF][ABCDEF]|[ABCDEF]\d|\d[ABCDEF]|\d\d/g);
     if(results === null){
         _StdIn.putText("INVALID HEX");
-    }else{
+    }
+    else{
         _StdIn.putText("VALID HEX");
     }
 }

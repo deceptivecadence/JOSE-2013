@@ -120,10 +120,9 @@ function CLIconsole() {
             var data = _DrawingContext.getImageData(0,0,_Canvas.width,_Canvas.height);
             this.clearScreen();
             this.resetXY();
-            var spacing = _DefaultFontSize + _FontHeightMargin;
-            var distance = spacing * 13 * -1;//worst case-most lines currently a command (help) needs
+            var distance = (_DefaultFontSize + _FontHeightMargin) * -1;//worst case-most lines currently a command (help) needs
             _DrawingContext.putImageData(data,0,distance)
-            this.CurrentYPosition = oldY + distance + spacing //distance is negative
+            this.CurrentYPosition = oldY //distance is negative
        }else{
             this.CurrentYPosition += _DefaultFontSize + _FontHeightMargin;
        }
