@@ -11,6 +11,7 @@ function Shell() {
     this.promptStr   = ">";
     this.commandList = [];
     this.curses      = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
+    this.adviceArray = ["You should probably just talk it out."];
     this.apologies   = "[sorry]";
     // Methods
     this.init        = shellInit;
@@ -109,11 +110,20 @@ function shellInit() {
     sc.function = shellTrap;
     this.commandList[this.commandList.length] = sc;
 
+    //load
     sc = new ShellCommand();
     sc.command = "load";
     sc.description = " - loads program hex"
     sc.function = shellLoad;
     this.commandList[this.commandList.length] = sc;
+
+    //advice
+    sc = new ShellCommand();
+    sc.command = "advice";
+    sc.description = " - need advice on life?"
+    sc.function = shellAdvice;
+    this.commandList[this.commandList.length] = sc;
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -426,6 +436,8 @@ function shellTrap(args){
     _KernelInterruptQueue.enqueue( new Interrupt(KTRAP_IRQ, params) );
 }
 
+
+//loads user hex program from pasted input
 function shellLoad(args){
     var text = $('#taProgramInput').val();
     text = text.toUpperCase();
@@ -437,4 +449,11 @@ function shellLoad(args){
     else{
         _StdIn.putText("VALID HEX");
     }
+}
+
+//provides advice
+function shellAdvice(args){
+    //.5 is used so the index doesn't always go to zero due to the floor
+    var i = Math.floor((Math.random()*(_OsShell.adviceArray.length - 1))+.5);
+    _StdIn.putText(_OsShell.adviceArray[i]); 
 }
