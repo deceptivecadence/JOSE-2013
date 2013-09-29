@@ -447,7 +447,8 @@ function shellLoad(args){
         _StdIn.putText("INVALID HEX");
     }
     else{
-        _StdIn.putText("VALID HEX");
+        //_CPU.
+        _StdIn.putText("program loaded");
     }
 }
 

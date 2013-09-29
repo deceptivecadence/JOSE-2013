@@ -1,4 +1,4 @@
-/* ------------  
+ /* ------------  
    CPU.js
 
    Requires global.js.
@@ -14,20 +14,18 @@
    ------------ */
 
 function Cpu() {
-    this.PC    = 0;     // Program Counter
-    this.Acc   = 0;     // Accumulator
-    this.Xreg  = 0;     // X register
-    this.Yreg  = 0;     // Y register
-    this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
-    this.isExecuting = false;
-    
+
     this.init = function() {
-        this.PC    = 0;
-        this.Acc   = 0;
-        this.Xreg  = 0;
-        this.Yreg  = 0;
-        this.Zflag = 0;      
-        this.isExecuting = false;  
+        this.PC    = 0;     // Program Counter
+        this.Acc   = 0;     // Accumulator
+        this.Xreg  = 0;     // X register
+        this.Yreg  = 0;     // Y register
+        this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
+        this.isExecuting = false;
+        this.memory = [];
+        this.baseIndex = -1;
+        this.endIndex = -1;
+        this.numberOfProcesses = 0;
     };
     
     this.cycle = function() {
@@ -35,4 +33,20 @@ function Cpu() {
         // TODO: Accumulate CPU usage and profiling statistics here.
         // Do the real work here. Be sure to set this.isExecuting appropriately.
     };
+
+    this.load = function(data){
+        if (this.memory.length !== 768){
+            if($.isArray(data)){
+                this.baseIndex = this.memory.length
+                this.memory = this.memory.concat(data)
+                this.endIndex = this.memory.length
+                this.numberOfProcesses += 1
+                
+
+          }
+        }
+        else{
+            //TODO: throw memory interrupt
+        }
+    }
 }
