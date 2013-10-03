@@ -441,13 +441,13 @@ function shellTrap(args){
 function shellLoad(args){
     var text = $('#taProgramInput').val();
     text = text.toUpperCase();
-    console.log(text);
-    var results = text.match(/[ABCDEF][ABCDEF]|[ABCDEF]\d|\d[ABCDEF]|\d\d/g);
+    var results = text.match(/[A-F][A-F]|[A-F]\d|\d[A-F]|\d\d/g);
+    console.log(results);
     if(results === null){
         _StdIn.putText("INVALID HEX");
     }
     else{
-        //_CPU.
+        _CPU.load(results);
         _StdIn.putText("program loaded");
     }
 }

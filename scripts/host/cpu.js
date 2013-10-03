@@ -22,10 +22,9 @@ function Cpu() {
         this.Yreg  = 0;     // Y register
         this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
         this.isExecuting = false;
-        this.memory = [];
         this.baseIndex = -1;
         this.endIndex = -1;
-        this.numberOfProcesses = 0;
+        this.processArray = [];
     };
     
     this.cycle = function() {
@@ -34,19 +33,8 @@ function Cpu() {
         // Do the real work here. Be sure to set this.isExecuting appropriately.
     };
 
-    this.load = function(data){
-        if (this.memory.length !== 768){
-            if($.isArray(data)){
-                this.baseIndex = this.memory.length
-                this.memory = this.memory.concat(data)
-                this.endIndex = this.memory.length
-                this.numberOfProcesses += 1
-                
-
-          }
-        }
-        else{
-            //TODO: throw memory interrupt
-        }
+    //program - program (string array)
+    this.load = function(program){ 
+        _MMU.load(program);
     }
 }

@@ -6,17 +6,17 @@
 
 function ProcessControlBlock(){
 	
-
-	this.init = function(cpuData){
-		this.state          = "";	 //Process state
+	this.init = function(memoryData){
+		this.state          = "ready";	 //Process state
 		this.programCounter = "";	 //Program Counter
-		this.base           = cpuData.baseIndex;	 //memory base addrress
-		this.end          	= cpuData.endIndex;	 //memory limit
-		this.pid            = cpuData.numberOfProcesses;	 //Process id
+		this.baseIndex      = _MMU.baseIndex;	 //memory base addrress
+		this.endIndex       = _MMU.endIndex;
+		this.limit          = 255;	 //memory limit
+		this.pid            = _CPU.processArray.length + 1;	 //Process id
 		this.PC             = 0;     // Program Counter
-	    this.Acc   			= cpuData.Acc;     // Accumulator
-	    this.Xreg  			= cpuData.Xreg;     // X register
-	    this.Yreg  			= cpuData.Yreg;     // Y register
-	    this.Zflag 			= cpuData.Zflag;     // Z-ero flag
+	    this.Acc   			= _CPU.Acc;     // Accumulator
+	    this.Xreg  			= _CPU.Xreg;     // X register
+	    this.Yreg  			= _CPU.Yreg;     // Y register
+	    this.Zflag 			= _CPU.Zflag;     // Z-ero flag
 	}
 }
