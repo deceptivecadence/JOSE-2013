@@ -6,15 +6,21 @@ function MemoryManager(){
 		this.baseIndex = 0;
 		this.endIndex = 0;
 		this.len = 255;
+		this.memory = new Memory();
+		this.memory.init();
+		this.processArray = [];
 	}
 
 	this.load = function(program){
-		if (_Memory.memoryArray.length !== 768){
+		if (this.memory.memoryArray.length !== 768){
 	        if($.isArray(program)){
-	        	this.baseIndex = _Memory.memoryArray.length;
-	            _Memory.memoryArray = _Memory.memoryArray.concat(program);
-	            this.endIndex = _Memory.memoryArray.length;
-	            processBlock = new ProcessControlBlock().init("TODO");
+	        	if(program.length <= 256){
+		        	this.baseIndex = this.memory.memoryArray.length;
+		            this.memory.memoryArray = this.memory.memoryArray.concat(program);
+		            this.endIndex = this.memory.memoryArray.length;
+		            processBlock = new ProcessControlBlock().init("TODO");
+		            this.processArray.push(processBlock);
+		        }
 	      	}
 	    }
 	}

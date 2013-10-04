@@ -30,7 +30,6 @@ var KEYCODE_HISTORY_CONFLICT = false;
 //
 var _CPU = null;
 var _MMU = null;
-var _Memory = null;
 
 var _OSclock = 0;       // Page 23.
 

@@ -22,9 +22,6 @@ function Cpu() {
         this.Yreg  = 0;     // Y register
         this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
         this.isExecuting = false;
-        this.baseIndex = -1;
-        this.endIndex = -1;
-        this.processArray = [];
     };
     
     this.cycle = function() {
@@ -36,5 +33,9 @@ function Cpu() {
     //program - program (string array)
     this.load = function(program){ 
         _MMU.load(program);
+    }
+
+    this.run = function(pid){
+        //TODO:Assembly code parser
     }
 }

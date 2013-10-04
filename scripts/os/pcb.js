@@ -12,7 +12,7 @@ function ProcessControlBlock(){
 		this.baseIndex      = _MMU.baseIndex;	 //memory base addrress
 		this.endIndex       = _MMU.endIndex;
 		this.limit          = 255;	 //memory limit
-		this.pid            = _CPU.processArray.length + 1;	 //Process id
+		this.pid            = _MMU.processArray.length + 1;	 //Process id
 		this.PC             = 0;     // Program Counter
 	    this.Acc   			= _CPU.Acc;     // Accumulator
 	    this.Xreg  			= _CPU.Xreg;     // X register

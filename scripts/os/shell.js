@@ -124,6 +124,13 @@ function shellInit() {
     sc.function = shellAdvice;
     this.commandList[this.commandList.length] = sc;
 
+    //run
+    sc = new ShellCommand();
+    sc.command = "run";
+    sc.description = " - <pid> run the program specified by the pid"
+    sc.function = shellAdvice;
+    this.commandList[this.commandList.length] = sc;
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -457,4 +464,24 @@ function shellAdvice(args){
     //.5 is used so the index doesn't always go to zero due to the floor
     var i = Math.floor((Math.random()*(_OsShell.adviceArray.length - 1))+.5);
     _StdIn.putText(_OsShell.adviceArray[i]); 
+}
+
+function shellRun(args){
+    if (typeof args === 'number'){
+        var pidFound = false;
+        for(let process of _MMU.processArray){
+            if(!pidFound){
+                if(process.pid === args){
+                    _CPU.run(args);
+                    pidFound = true;
+                }
+                else{
+                    _StdIn.putText("Pid does not exist")
+                }
+            }
+        }
+    }
+    else{
+        _StdIn.putText("Please provide a proper pid")
+    }
 }
