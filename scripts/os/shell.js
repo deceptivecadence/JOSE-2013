@@ -452,10 +452,11 @@ function shellLoad(args){
     console.log(results);
     if(results === null){
         _StdIn.putText("INVALID HEX");
+        //TODO: FIX HEX?
     }
     else{
         _CPU.load(results);
-        _StdIn.putText("program loaded");
+        _StdIn.putText("program loaded, pid: " + _MMU.processArray.length - 1 );
     }
 }
 
@@ -469,11 +470,14 @@ function shellAdvice(args){
 function shellRun(args){
     if (typeof args === 'number'){
         var pidFound = false;
-        for(let process of _MMU.processArray){
+        for (var i=0; i<_MMU.processArray.length; i++){
+            var process = _MMU.processArray[i];
             if(!pidFound){
                 if(process.pid === args){
-                    _CPU.run(args);
+                    _CPU.isExecuting = true;
                     pidFound = true;
+                    _ReadyQueue.enqueue(process);
+                    //TODO: Ready execution
                 }
                 else{
                     _StdIn.putText("Pid does not exist")

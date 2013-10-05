@@ -24,10 +24,12 @@ function Cpu() {
         this.isExecuting = false;
     };
     
+    //Being called when CPU isExecuting
     this.cycle = function() {
         krnTrace("CPU cycle");
         // TODO: Accumulate CPU usage and profiling statistics here.
         // Do the real work here. Be sure to set this.isExecuting appropriately.
+        this.execute(this.fetch());
     };
 
     //program - program (string array)
@@ -35,7 +37,10 @@ function Cpu() {
         _MMU.load(program);
     }
 
-    this.run = function(pid){
-        //TODO:Assembly code parser
+    this.fetch = function(){
+        var prog = _ReadyQueue.dequeue();
+    }
+    this.execute = function(program){
+
     }
 }

@@ -89,6 +89,7 @@ function hostBtnStartOS_click(btn)
     _MMU.init();
     _Memory = new Memory();
     _Memory.init();
+    _ReadyQueue = new Queue();
 
 
     // ... then set the host clock pulse ...
