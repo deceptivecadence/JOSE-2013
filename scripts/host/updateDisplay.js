@@ -1,7 +1,6 @@
 
 
-function fillMemory() {
-	console.log("called");
+function fillMemory(){
     var size = 768;
     var sections = 8;
     var length = size/sections;

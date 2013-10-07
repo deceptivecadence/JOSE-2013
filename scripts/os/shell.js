@@ -128,7 +128,7 @@ function shellInit() {
     sc = new ShellCommand();
     sc.command = "run";
     sc.description = " - <pid> run the program specified by the pid"
-    sc.function = shellAdvice;
+    sc.function = shellRun;
     this.commandList[this.commandList.length] = sc;
 
     // processes - list the running processes and their IDs
@@ -448,15 +448,16 @@ function shellTrap(args){
 function shellLoad(args){
     var text = $('#taProgramInput').val();
     text = text.toUpperCase();
-    var results = text.test(/[A-F][A-F]|[A-F]\d|\d[A-F]|\d\d/g);
-    console.log(results);
-    if(results === null){
-        _StdIn.putText("INVALID HEX");
-        //TODO: FIX HEX?
+    var patt = /^([A-F][A-F]\s?|[A-F]\d\s?|\d[A-F]\s?|\d\d\s?)+$/
+    var result = patt.test(text);
+    console.log(result);
+    console.log(text);
+    if(result){
+        _CPU.load(text.split(" ")); // This initiates the loading, the cpu which calls mmu
+        _StdIn.putText("program loaded, pid: " + (_MMU.processArray.length - 1 ));
     }
     else{
-        _CPU.load(results);
-        _StdIn.putText("program loaded, pid: " + _MMU.processArray.length - 1 );
+        _StdIn.putText("INVALID HEX");
     }
 }
 
@@ -468,16 +469,18 @@ function shellAdvice(args){
 }
 
 function shellRun(args){
-    if (typeof args === 'number'){
+    var pid = parseInt(args[0]);
+    if (typeof pid === 'number'){
         var pidFound = false;
         for (var i=0; i<_MMU.processArray.length; i++){
             var process = _MMU.processArray[i];
             if(!pidFound){
-                if(process.pid === args){
+                if(process.pid === pid){
                     _CPU.isExecuting = true;
                     pidFound = true;
                     _ReadyQueue.enqueue(process);
-                    //TODO: Ready execution
+                    console.log("I IS READY TO EXECUTE")
+                    //TODO: Ready execution 
                 }
                 else{
                     _StdIn.putText("Pid does not exist")

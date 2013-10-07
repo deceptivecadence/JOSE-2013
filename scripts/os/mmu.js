@@ -15,10 +15,12 @@ function MemoryManager(){
 		if (this.memory.memoryArray.length !== 768){
 	        if($.isArray(program)){
 	        	if(program.length <= 256){
+	        		console.log("in mmu loaded");
 		        	this.baseIndex = this.memory.memoryArray.length;
 		            this.memory.memoryArray = this.memory.memoryArray.concat(program);
 		            this.endIndex = this.memory.memoryArray.length;
-		            processBlock = new ProcessControlBlock().init("TODO");
+		            processBlock = new ProcessControlBlock();
+		            processBlock.init("TODO");
 		            this.processArray.push(processBlock);
 		        }
 	      	}
