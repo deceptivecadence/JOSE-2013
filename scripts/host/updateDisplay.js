@@ -1,17 +1,20 @@
 
 
-function fillMemory(args) {
-    var size = _MMU.memory.memoryArray.length;
+function fillMemory() {
+	console.log("called");
+    var size = 768;
     var sections = 8;
     var length = size/sections;
-    var counter = 0
+    var counter = 0;
+    var label = 0;
     for (var i=0; i<length; i++){
-        $("table").append("<tr> <td class='memLabel' id='"+counter.toString(16)+"''> </tr>")
+    	//console.log("first loop");
+    	label = counter;
+        $("tbody").append("<tr class='memLabel' id='"+label.toString(16)+"'><td>$"+label.toString(16)+"</td></tr>");        
         
         for (var j=0; j<sections; j++){
-        	var counter += j;
-        	var stringVal = counter.toString(16);
-        	$("#"+length.toString(16)).append("<td class='memCell' id='"+stringVal+"'></td>")
+        	$(".memLabel#"+label.toString(16)).append("<td class='memCell' id='"+counter.toString(16)+"'></td>");
+        	counter = counter + 1;
         }
     }
 }

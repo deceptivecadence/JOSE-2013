@@ -23,6 +23,7 @@
    <script type="text/javascript" src="scripts/host/devices.js"></script>
    <script type="text/javascript" src="scripts/host/cpu.js"></script>
    <script type="text/javascript" src="scripts/host/memory.js"></script>
+   <script type="text/javascript" src="scripts/host/updateDisplay.js"></script>
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="scripts/os/interrupt.js"></script>
@@ -40,7 +41,7 @@
    <script type="text/javascript" src="scripts/utils.js"></script>
    <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script>
 
-</head>
+   </head>
 
 <body onload="hostInit();">
 
@@ -100,22 +101,22 @@
    </div>
    
    <div id="divMemory" style="float: right;">  
-         <table id="tableMemory" border="1">           
+         <table id="tableMemory" border="1">
+         <thead>
+            <tr>
+                <td>X</td>
+                <td>0</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+            </tr>
+         </thead>           
             <tbody>
-               <tr>
-                  <td id="000">$000
-                     <td class="memCell" id="000"></td>
-                     <td class="memCell" id="001"></td>
-                     <td class="memCell" id="002"></td>
-                     <td class="memCell" id="003"></td>
-                     <td class="memCell" id="004"></td>
-                     <td class="memCell" id="005"></td>
-                     <td class="memCell" id="006"></td>
-                     <td class="memCell" id="007"></td>
-                  </td>
-               </tr>
-                  </td>
-               </tr>
+
             </tbody>
          </table>     
    </div>
