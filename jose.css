@@ -38,6 +38,18 @@ h3 {
    margin-left: 4px;
 }
 
+#divMemory{
+   width: auto;
+   height: auto;
+   float: right;
+}
+
+#tableMemory{
+   overflow: scroll;
+   float: right;
+   border: 1px solid black;
+}
+
 #divStatus{
    display: inline-block;
    background-color: #DFDBC3;
