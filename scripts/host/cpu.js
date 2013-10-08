@@ -21,6 +21,8 @@ function Cpu() {
         this.Xreg  = 0;     // X register
         this.Yreg  = 0;     // Y register
         this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
+        this.offset = 0;
+        this.program = null; // should have?
         this.isExecuting = false;
     };
     
@@ -38,7 +40,8 @@ function Cpu() {
     }
 
     this.fetch = function(){
-        var prog = _ReadyQueue.dequeue();
+        this.prog = _ReadyQueue.dequeue(); //do I need this exactly, or just dequeue
+        return _MMU.memory[this.PC + this.offset] //offset will change within individual instruction function
     }
 
 
@@ -54,7 +57,7 @@ function Cpu() {
         AC: load the y reg from memory (extra param)
         EA: No operation
         00: Break
-        EC: compare a bye in mem to the x reg sets z flag  if equal (extra param)
+        EC: compare a byte in mem to the x reg sets z flag  if equal (extra param)
         D0: branch x byes if z flag == 0
         EE: increment the value of a byte
         FF: system call
@@ -67,36 +70,65 @@ function Cpu() {
     this.execute = function(inst){
 
         switch(inst){
-            case "A9":
-                break;
-            case "AD":
-                break;
-            case "8D":
-                break;
-            case "6D":
-                break;
-            case "A2":
-                break;
-            case "AE":
-                break;
-            case "A0":
-                break;
-            case "AC":
-                break;
-            case "EA":
-                break;
-            case "00":
-                break;
-            case "EC":
-                break;
-            case "D0":
-                break;
-            case "EE":
-                break;
-            case "FF":
-                break;
+            case "A9":loadAcc() break;
+            case "AD":loadAccFromMemory() break;
+            case "8D":storeAccMemory() break;
+            case "6D":addFromMemoryToAcc() break;
+            case "A2":loadxReg() break;
+            case "AE":loadxRegFromMemory() break;
+            case "A0":loadyReg() break;
+            case "AC":loadyRegFromMemory() break;
+            case "EA":noOp() break;
+            case "00":breakOp() break;
+            case "EC":compareByteMemToX() break;
+            case "D0":branchIfZero() break;
+            case "EE":incrementByByte() break;
+            case "FF":systemCall() break;
             default: //TODO: ERROR
         }
 
     }
+}
+
+function loadAcc(){
+
+}
+function loadAccFromMemory(){
+
+}
+function storeAccMemory(){
+
+}
+function addFromMemoryToAcc(){
+
+}
+function loadxReg(){
+
+}
+function loadxRegFromMemory(){
+
+}
+function loadyReg(){
+
+}
+function loadyRegFromMemory(){
+
+}
+function noOp(){
+
+}
+function breakOp(){
+
+}
+function compareByteMemToX(){
+
+}
+function branchIfZero(){
+
+}
+function incrementByByte(){
+
+}
+function systemCall(){
+
 }
