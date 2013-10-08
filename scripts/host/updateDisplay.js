@@ -17,3 +17,9 @@ function fillMemory(){
         }
     }
 }
+
+function updateMemory(){
+	$(".memCell").each(function(index){
+		$(this).text(_MMU.memory.memoryArray[index])
+	})
+}

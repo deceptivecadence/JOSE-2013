@@ -18,7 +18,7 @@ function MemoryManager(){
 	        		console.log("in mmu loaded");
 		        	this.baseIndex = this.memory.memoryArray.length;
 		            this.memory.memoryArray = this.memory.memoryArray.concat(program);
-		            this.endIndex = this.memory.memoryArray.length;
+		            this.endIndex = this.memory.memoryArray.length - 1;
 		            processBlock = new ProcessControlBlock();
 		            processBlock.init("TODO");
 		            this.processArray.push(processBlock);

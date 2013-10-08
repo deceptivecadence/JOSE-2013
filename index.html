@@ -99,28 +99,57 @@
               tabindex="3">
       </canvas>
    </div>
-   
-   <div id="divMemory" style="float: right;">  
-         <table id="tableMemory" border="1">
-         <thead>
-            <tr>
-                <td>X</td>
-                <td>0</td>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
-            </tr>
-         </thead>           
-            <tbody>
+   <div id="hardwareDisplay">
+        <div id="divMemory">  
+            <label>Memory</label>
+            <br>
+            <table id="tableMemory" border="1">
+                <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                </thead>
 
-            </tbody>
-         </table>     
-   </div>
-   
+                <tbody>
+
+                </tbody>
+            </table>     
+        </div>
+
+       <div id="divCpu">
+           <label>CPU</label>
+           <br>
+           <table id="tableCpu" border="1">
+               <thead>
+                   <tr>
+                       <td>PC</td>
+                       <td>Acc</td>
+                       <td>X-Reg</td>
+                       <td>Y-Reg</td>
+                       <td>Z-Flag</td>
+                   </tr>
+               </thead>
+
+               <tbody>
+                   <tr id="cpuRow">
+                       <td id="cpuPC"></td>
+                       <td id="cpuAcc"></td>
+                       <td id="cpuxReg"></td>
+                       <td id="cpuyReg"></td>
+                       <td id="cpuzFlag"></td>
+                   </tr>
+               </tbody>
+           </table>
+       </div>
+    </div>
    <div id="divLog" style="margin-left:520px;">
       <label>
          Log

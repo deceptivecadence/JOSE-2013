@@ -450,8 +450,8 @@ function shellLoad(args){
     text = text.toUpperCase();
     var patt = /^([A-F][A-F]\s?|[A-F]\d\s?|\d[A-F]\s?|\d\d\s?)+$/
     var result = patt.test(text);
-    console.log(result);
-    console.log(text);
+    // console.log(result);
+    // console.log(text);
     if(result){
         _CPU.load(text.split(" ")); // This initiates the loading, the cpu which calls mmu
         _StdIn.putText("program loaded, pid: " + (_MMU.processArray.length - 1 ));
@@ -476,11 +476,12 @@ function shellRun(args){
             var process = _MMU.processArray[i];
             if(!pidFound){
                 if(process.pid === pid){
+                    _ReadyQueue.enqueue(process);
+                    _CPU.init(); //Clears the CPU info for new program
+                    _CPU.program = _ReadyQueue.dequeue();
                     _CPU.isExecuting = true;
                     pidFound = true;
-                    _ReadyQueue.enqueue(process);
-                    console.log("I IS READY TO EXECUTE")
-                    //TODO: Ready execution 
+                    // console.log("I IS READY TO EXECUTE")
                 }
                 else{
                     _StdIn.putText("Pid does not exist")

@@ -38,23 +38,40 @@ h3 {
    margin-left: 4px;
 }
 
+#hardwareDisplay{
+	float: right;
+	width: 291px;
+}
+
 #divMemory{
-   width: auto;
-   height: auto;
-   float: right;
+   	width:  auto;
+   	height: 500px;
+   	float: right;
+   	overflow: scroll;
 }
 
 #tableMemory{
-   overflow: scroll;
-   float: right;
-   border: 1px solid black;
+   	float: right;
+   	border: 1px solid black;
+}
+
+#divCpu{
+	clear: both;
+	margin-left: 0;
+	position: relative;
+}
+
+td{
+	width: 1.5em;
+	height: 1.5em;
+	text-align: center;
 }
 
 #divStatus{
-   display: inline-block;
-   background-color: #DFDBC3;
-   visibility: visible;
-   border:  2px solid red;
+   	display: inline-block;
+   	background-color: #DFDBC3;
+   	visibility: visible;
+   	border:  2px solid red;
 }
 
 

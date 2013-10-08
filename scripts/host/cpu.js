@@ -21,7 +21,6 @@ function Cpu() {
         this.Xreg  = 0;     // X register
         this.Yreg  = 0;     // Y register
         this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
-        this.offset = 0;
         this.program = null; // should have?
         this.isExecuting = false;
     };
@@ -31,19 +30,24 @@ function Cpu() {
         krnTrace("CPU cycle");
         // TODO: Accumulate CPU usage and profiling statistics here.
         // Do the real work here. Be sure to set this.isExecuting appropriately.
-        this.execute(this.fetch());
+        if(this.PC < this.program.endIndex){
+            this.execute(this.fetch());
+        }
+        else{
+            this.isExecuting = false;
+        }
+        
     };
 
     //program - program (string array)
     this.load = function(program){ 
         _MMU.load(program);
+        updateMemory();
     }
 
     this.fetch = function(){
-        this.prog = _ReadyQueue.dequeue(); //do I need this exactly, or just dequeue
-        return _MMU.memory[this.PC + this.offset] //offset will change within individual instruction function
+        return _MMU.memory.memoryArray[this.PC]//offset will change within individual instruction function
     }
-
 
 
     /*   
@@ -68,67 +72,86 @@ function Cpu() {
 
 
     this.execute = function(inst){
-
         switch(inst){
-            case "A9":loadAcc() break;
-            case "AD":loadAccFromMemory() break;
-            case "8D":storeAccMemory() break;
-            case "6D":addFromMemoryToAcc() break;
-            case "A2":loadxReg() break;
-            case "AE":loadxRegFromMemory() break;
-            case "A0":loadyReg() break;
-            case "AC":loadyRegFromMemory() break;
-            case "EA":noOp() break;
-            case "00":breakOp() break;
-            case "EC":compareByteMemToX() break;
-            case "D0":branchIfZero() break;
-            case "EE":incrementByByte() break;
-            case "FF":systemCall() break;
+            case "A9":this.loadAcc(); break;
+            case "AD":this.loadAccFromMemory(); break;
+            case "8D":this.storeAccMemory(); break;
+            case "6D":this.addFromMemoryToAcc(); break;
+            case "A2":this.loadxReg(); break;
+            case "AE":this.loadxRegFromMemory(); break;
+            case "A0":this.loadyReg(); break;
+            case "AC":this.loadyRegFromMemory(); break;
+            case "EA":this.noOp(); break;
+            case "00":this.breakOp(); break;
+            case "EC":this.compareByteMemToX(); break;
+            case "D0":this.branchIfZero(); break;
+            case "EE":this.incrementByByte(); break;
+            case "FF":this.systemCall(); break;
             default: //TODO: ERROR
         }
 
     }
-}
 
-function loadAcc(){
+    this.loadAcc = function(){
+        //console.log(this.PC);
+        this.Acc = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        this.PC = this.PC + 2;
+        console.log(this.PC);
+    }
+    this.loadAccFromMemory = function (){
+        //TODO: NEED TO READ OTHER PARAM?
+        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var address = checkBounds(indexOfAddress);
+        if(typeof address === "number"){
+            this.Acc = parseInt(_MMU.memory.memoryArray[address],16);
+            this.PC = this.PC + 3
+        }
 
-}
-function loadAccFromMemory(){
+    }
+    this.storeAccMemory = function(){
 
-}
-function storeAccMemory(){
+    }
+    this.addFromMemoryToAcc = function(){
 
-}
-function addFromMemoryToAcc(){
+    }
+    this.loadxReg = function(){
 
-}
-function loadxReg(){
+    }
+    this.loadxRegFromMemory = function(){
 
-}
-function loadxRegFromMemory(){
+    }
+    this.loadyReg = function(){
 
-}
-function loadyReg(){
+    }
+    this.loadyRegFromMemory = function(){
 
-}
-function loadyRegFromMemory(){
+    }
+    this.noOp = function(){
 
-}
-function noOp(){
+    }
+    this.breakOp = function(){
 
-}
-function breakOp(){
+    }
+    this.compareByteMemToX = function(){
 
-}
-function compareByteMemToX(){
+    }
+    this.branchIfZero = function(){
 
-}
-function branchIfZero(){
+    }
+    this.incrementByByte = function(){
 
-}
-function incrementByByte(){
+    }
+    this.systemCall = function(){
 
-}
-function systemCall(){
-
+    }
+    this.checkBounds = function(index){
+        if (index <= this.prog.endIndex){
+            return _MMU.memory.memoryArray[index];
+        }
+        else{
+            this.init(); //resets cpu attributes since program failed
+            //TODO:raise memory bounds error
+            return null;
+        }
+    }
 }
