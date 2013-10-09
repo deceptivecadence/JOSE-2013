@@ -90,62 +90,111 @@ function Cpu() {
         }
 
     }
+    //Potentially could wrap all of this in one method with flags to signify memory or not run(object: obj ,needsMemory: 0,1)
 
+
+    //A9
     this.loadAcc = function(){
         //console.log(this.PC);
         this.Acc = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
-        this.PC = this.PC + 2;
+        this.incrementPC(2);
         console.log(this.PC);
     }
+
+    //AD
     this.loadAccFromMemory = function (){
         //TODO: NEED TO READ OTHER PARAM?
         var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
         var address = checkBounds(indexOfAddress);
         if(typeof address === "number"){
             this.Acc = parseInt(_MMU.memory.memoryArray[address],16);
-            this.PC = this.PC + 3
+            this.incrementPC(3);
         }
 
     }
+
+    //8D
     this.storeAccInMemory = function(){
         //TODO: NEED TO READ OTHER PARAM?
         var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
         var address = checkBounds(indexOfAddress);
         if(typeof address === "number"){
             _MMU.memory.memoryArray[address] = this.Acc;
-            this.PC = this.PC + 3
+            this.incrementPC(3);
         }
     }
+
+    //6D
     this.addFromMemoryToAcc = function(){
-
+        //TODO: NEED TO READ OTHER PARAM?
+        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var address = checkBounds(indexOfAddress);
+        if(typeof address === "number"){
+            this.Acc = this.Acc + parseInt(_MMU.memory.memoryArray[address],16);
+            this.incrementPC(3);
+        }
     }
+
+    //A2
     this.loadxReg = function(){
-
+        this.Xreg = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        this.incrementPC(2);
     }
+
+    //AE
     this.loadxRegFromMemory = function(){
-
+        //TODO: NEED TO READ OTHER PARAM?
+        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var address = checkBounds(indexOfAddress);
+        if(typeof address === "number"){
+            this.Xreg = parseInt(_MMU.memory.memoryArray[address],16);
+            this.incrementPC(3);
+        }
     }
+
+    //A0
     this.loadyReg = function(){
-
+        this.Yreg = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        this.incrementPC(2);
     }
+
+    //AC
     this.loadyRegFromMemory = function(){
-
+        //TODO: NEED TO READ OTHER PARAM?
+        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var address = checkBounds(indexOfAddress);
+        if(typeof address === "number"){
+            this.Yreg = parseInt(_MMU.memory.memoryArray[address],16);
+            this.incrementPC(3);
+        }
     }
+
+    //EA
     this.noOp = function(){
-
+        //noOp = do nothing...
     }
+
+    //00
     this.breakOp = function(){
 
     }
+
+    //EC
     this.compareByteMemToX = function(){
 
     }
+
+    //D0
     this.branchIfZero = function(){
 
     }
+
+    //EE
     this.incrementByByte = function(){
 
     }
+
+    //FF
     this.systemCall = function(){
 
     }
@@ -159,4 +208,10 @@ function Cpu() {
             return null;
         }
     }
+
+    this.incrementPC = function(amount){
+        this.PC = this.PC + amount
+    }
+
+
 }
