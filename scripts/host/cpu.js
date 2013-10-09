@@ -42,7 +42,6 @@ function Cpu() {
     //program - program (string array)
     this.load = function(program){ 
         _MMU.load(program);
-        updateMemory();
     }
 
     this.fetch = function(){
@@ -75,7 +74,7 @@ function Cpu() {
         switch(inst){
             case "A9":this.loadAcc(); break;
             case "AD":this.loadAccFromMemory(); break;
-            case "8D":this.storeAccMemory(); break;
+            case "8D":this.storeAccInMemory(); break;
             case "6D":this.addFromMemoryToAcc(); break;
             case "A2":this.loadxReg(); break;
             case "AE":this.loadxRegFromMemory(); break;
@@ -108,8 +107,14 @@ function Cpu() {
         }
 
     }
-    this.storeAccMemory = function(){
-
+    this.storeAccInMemory = function(){
+        //TODO: NEED TO READ OTHER PARAM?
+        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var address = checkBounds(indexOfAddress);
+        if(typeof address === "number"){
+            _MMU.memory.memoryArray[address] = this.Acc;
+            this.PC = this.PC + 3
+        }
     }
     this.addFromMemoryToAcc = function(){
 

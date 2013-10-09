@@ -27,6 +27,7 @@ function hostClockPulse()
    // Call the kernel clock pulse event handler.
    krnOnCPUClockPulse();
    updateTime();
+   updateDisplay();
 }
 
 
