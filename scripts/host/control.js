@@ -119,3 +119,9 @@ function hostBtnReset_click(btn)
     // be reloaded from the server. If it is false or not specified, the browser may reload the 
     // page from its cache, which is not what we want.
 }
+
+function hostBtnStep_click(btn)
+{
+    _CPU.step = true;
+    _CPU.isExecuting = !_CPU.isExecuting;
+}

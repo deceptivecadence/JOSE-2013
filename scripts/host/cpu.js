@@ -23,6 +23,7 @@ function Cpu() {
         this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
         this.program = null; // should have?
         this.isExecuting = false;
+        this.step = false;
     };
     
     //Being called when CPU isExecuting
@@ -30,7 +31,7 @@ function Cpu() {
         krnTrace("CPU cycle");
         // TODO: Accumulate CPU usage and profiling statistics here.
         // Do the real work here. Be sure to set this.isExecuting appropriately.
-        if(this.PC < this.program.endIndex){
+        if(this.isExecuting && this.PC < this.program.endIndex){
             this.execute(this.fetch());
         }
         else{
@@ -71,7 +72,7 @@ function Cpu() {
 
 
     this.execute = function(inst){
-        console.log(inst + " INST");
+        //console.log(inst + " INST");
         switch(inst){
             case "A9":this.loadAcc(); break;
             case "AD":this.loadAccFromMemory(); break;
@@ -87,9 +88,9 @@ function Cpu() {
             case "D0":this.branchIfZero(); break;
             case "EE":this.incrementByByte(); break;
             case "FF":this.systemCall(); break;
-            default: this.isExecuting = false;
+            default: this.breakOp(); break; //TODO: ERROR
         }
-        console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
+        //console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
 
     }
 
@@ -170,6 +171,7 @@ function Cpu() {
 
     //00
     this.breakOp = function(){
+        this.program.update('ended');
         this.isExecuting = false;
     }
 
