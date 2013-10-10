@@ -71,6 +71,7 @@ function Cpu() {
 
 
     this.execute = function(inst){
+        console.log(inst + " INST");
         switch(inst){
             case "A9":this.loadAcc(); break;
             case "AD":this.loadAccFromMemory(); break;
@@ -86,53 +87,48 @@ function Cpu() {
             case "D0":this.branchIfZero(); break;
             case "EE":this.incrementByByte(); break;
             case "FF":this.systemCall(); break;
-            default: //TODO: ERROR
+            default: this.isExecuting = false;
         }
+        console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
 
     }
-    //Potentially could wrap all of this in one method with flags to signify memory or not run(object: obj ,needsMemory: 0,1)
-
 
     //A9
     this.loadAcc = function(){
         //console.log(this.PC);
         this.Acc = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
         this.incrementPC(2);
-        console.log(this.PC);
     }
 
     //AD
     this.loadAccFromMemory = function (){
-        //TODO: NEED TO READ OTHER PARAM?
-        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
-        var address = checkBounds(indexOfAddress);
+        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16);//index of address 
+        var val = this.checkBoundsReference(address);
         if(typeof address === "number"){
-            this.Acc = parseInt(_MMU.memory.memoryArray[address],16);
-            this.incrementPC(3);
+            this.Acc = val;
         }
+        this.incrementPC(3);
 
     }
 
     //8D
     this.storeAccInMemory = function(){
-        //TODO: NEED TO READ OTHER PARAM?
-        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
-        var address = checkBounds(indexOfAddress);
+        var indexOfAddress = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var address = this.checkBounds(indexOfAddress);
         if(typeof address === "number"){
-            _MMU.memory.memoryArray[address] = this.Acc;
-            this.incrementPC(3);
+            _MMU.memory.memoryArray[address] = this.Acc.toString(16);
         }
+        this.incrementPC(3);
     }
 
     //6D
     this.addFromMemoryToAcc = function(){
-        //TODO: NEED TO READ OTHER PARAM?
-        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
-        var address = checkBounds(indexOfAddress);
-        if(typeof address === "number"){
-            this.Acc = this.Acc + parseInt(_MMU.memory.memoryArray[address],16);
-            this.incrementPC(3);
+        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var val = this.checkBoundsReference(address);
+        if(typeof val === "number"){
+            this.Acc = this.Acc + val;
         }
+        this.incrementPC(3);
     }
 
     //A2
@@ -143,13 +139,12 @@ function Cpu() {
 
     //AE
     this.loadxRegFromMemory = function(){
-        //TODO: NEED TO READ OTHER PARAM?
-        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
-        var address = checkBounds(indexOfAddress);
-        if(typeof address === "number"){
-            this.Xreg = parseInt(_MMU.memory.memoryArray[address],16);
-            this.incrementPC(3);
+        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var val = this.checkBoundsReference(address);
+        if(typeof val === "number"){
+            this.Xreg = val;
         }
+        this.incrementPC(3);
     }
 
     //A0
@@ -160,53 +155,118 @@ function Cpu() {
 
     //AC
     this.loadyRegFromMemory = function(){
-        //TODO: NEED TO READ OTHER PARAM?
-        var indexOfAddress = praseInt(_MMU.memory.memoryArray[this.PC + 1],16); //index of address
-        var address = checkBounds(indexOfAddress);
-        if(typeof address === "number"){
-            this.Yreg = parseInt(_MMU.memory.memoryArray[address],16);
-            this.incrementPC(3);
+        var indexOfAddress = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var val = this.checkBoundsReference(indexOfAddress);
+        if(typeof val === "number"){
+            this.Yreg = val;
         }
+        this.incrementPC(3);
     }
 
     //EA
     this.noOp = function(){
-        //noOp = do nothing...
+        this.incrementPC(1);
     }
 
     //00
     this.breakOp = function(){
-
+        this.isExecuting = false;
     }
 
     //EC
     this.compareByteMemToX = function(){
-
+        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var value = this.checkBoundsReference(address);
+        if(typeof value === "number"){
+            if(value === this.Xreg){
+                this.Zflag = 1;
+            }else{
+                this.Zflag = 0;
+            }
+        }
+        this.incrementPC(3);
     }
 
     //D0
     this.branchIfZero = function(){
-
+        if(this.Zflag == 0){
+            var additionalBranchBytes = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+            this.incrementPC(2);
+            var newAddress = (this.PC + additionalBranchBytes) % this.program.limit;
+            //var address = this.checkBounds(newAddress);
+            this.PC = newAddress;
+        }else{
+            this.incrementPC(2);
+        }
     }
 
     //EE
     this.incrementByByte = function(){
-
+        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16); //index of address
+        var value = this.checkBoundsReference(address);
+        if(typeof value === "number"){
+            var newVal = parseInt(value,16) + 1;
+            _MMU.memory.memoryArray[indexOfAddress] = newVal.toString(16); 
+        }
+        this.incrementPC(3);
     }
 
     //FF
     this.systemCall = function(){
+        //var param =  parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        if(this.Xreg === 1){
+            _StdIn.putText('' + this.Yreg);
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
+        }else if(this.Xreg === 2 && typeof this.checkBoundsReference(this.Yreg) === "number"){
+            console.log("sysCall xreg -2")
+            var address = this.Yreg;
+            var array = [];
+            while (_MMU.memory.memoryArray[address] !== '00'){
+                array.push(String.fromCharCode(parseInt(_MMU.memory.memoryArray[address],16)));
+                address = address + 1;
+            }
+            _StdIn.putText(array.join(""))
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
+        
+        }else{
+            console.log("sys call error");
+        }
+        this.incrementPC(1);
 
     }
-    this.checkBounds = function(index){
-        if (index <= this.prog.endIndex){
-            return _MMU.memory.memoryArray[index];
-        }
-        else{
-            this.init(); //resets cpu attributes since program failed
+
+    this.checkBoundsReference = function(index){
+
+        if (index >= this.program.baseIndex && index <= this.program.endIndex){
+            return parseInt(_MMU.memory.memoryArray[index],16);
+        }else{
+            /*console.log(index);
+            console.log(this.program.baseIndex);
+            console.log(this.program.endIndex);
+            console.log("bounds");*/
+            //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
             return null;
         }
+
+    }
+
+    this.checkBounds = function(index){
+        if (index >= this.program.baseIndex && index <= this.program.endIndex){
+            return index;
+        }
+        else{
+            /*console.log(index);
+            console.log(this.program.baseIndex);
+            console.log(this.program.endIndex);
+            console.log("bounds");*/
+            //this.init(); //resets cpu attributes since program failed
+            //TODO:raise memory bounds error
+            return null;
+        }
+
     }
 
     this.incrementPC = function(amount){
