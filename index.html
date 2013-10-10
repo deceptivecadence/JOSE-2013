@@ -22,6 +22,8 @@
    <script type="text/javascript" src="scripts/host/control.js"></script>
    <script type="text/javascript" src="scripts/host/devices.js"></script>
    <script type="text/javascript" src="scripts/host/cpu.js"></script>
+   <script type="text/javascript" src="scripts/host/memory.js"></script>
+   <script type="text/javascript" src="scripts/host/updateDisplay.js"></script>
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="scripts/os/interrupt.js"></script>
@@ -32,16 +34,18 @@
    <script type="text/javascript" src="scripts/os/queue.js"></script>
    <script type="text/javascript" src="scripts/os/shell.js"></script>
    <script type="text/javascript" src="scripts/os/kernel.js"></script>
+   <script type="text/javascript" src="scripts/os/mmu.js"></script>
+   <script type="text/javascript" src="scripts/os/pcb.js"></script>
 
    <!-- Other Routines -->
    <script type="text/javascript" src="scripts/utils.js"></script>
    <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script>
 
-</head>
+   </head>
 
 <body onload="hostInit();">
 
-<div id="divMain" style="margin-left: 200px;">
+<div id="divMain" style="">
 
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
@@ -69,20 +73,28 @@
              value="Reset"
              tabindex="2"
              onclick="hostBtnReset_click(this);">
+
+      <input type="button"
+             id = "btnStep"
+             name="brnStep"
+             class="normal_button"
+             value="Step"
+             tabindex="3"
+             onclick="hostBtnStep_click(this);">
    </div>
    
    <div id="divStatusTotal">
       <div id="divTime">
          <canvas id="time"
-                 width="300px"
-                 height=20px">
+                 width="180px"
+                 height="20px">
             
          </canvas>
       </div>
       <div id="divStatus">
          <canvas id="status"
-                 width="715px"
-                 height=20px">
+                 width="590px"
+                 height="20px">
             
          </canvas>
       </div>
@@ -95,7 +107,57 @@
               tabindex="3">
       </canvas>
    </div>
+   <div id="hardwareDisplay">
+        <div id="divMemory">  
+            <label>Memory</label>
+            <br>
+            <table id="tableMemory" border="1">
+                <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                </thead>
 
+                <tbody id="bodyMemory">
+
+                </tbody>
+            </table>     
+        </div>
+
+       <div id="divCpu">
+           <label>CPU</label>
+           <br>
+           <table id="tableCpu" border="1">
+               <thead>
+                   <tr>
+                       <td>PC</td>
+                       <td>Acc</td>
+                       <td>X-Reg</td>
+                       <td>Y-Reg</td>
+                       <td>Z-Flag</td>
+                   </tr>
+               </thead>
+
+               <tbody>
+                   <tr id="cpuRow">
+                       <td class="cpuCell" id="cpuPC"></td>
+                       <td class="cpuCell" id="cpuAcc"></td>
+                       <td class="cpuCell" id="cpuxReg"></td>
+                       <td class="cpuCell" id="cpuyReg"></td>
+                       <td class="cpuCell" id="cpuzFlag"></td>
+                   </tr>
+               </tbody>
+           </table>
+       </div>
+    </div>
    <div id="divLog" style="margin-left:520px;">
       <label>
          Log
@@ -103,11 +165,11 @@
          <textarea name="taLog"
                    id  ="taLog"
                    rows="26"
-                   cols="48"
+                   cols="30"
          ></textarea>
       </label>
    </div>
-
+   
    <div id="divUserProgramInput" style="margin-left:520px;">
       <label>
          User Program Input
@@ -115,7 +177,7 @@
          <textarea name="taProgramInput"
                    id  ="taProgramInput"
                    rows="8"
-                   cols="48"
+                   cols="30"
          ></textarea>
       </label>
    </div>

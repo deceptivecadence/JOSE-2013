@@ -29,7 +29,8 @@ var KEYCODE_HISTORY_CONFLICT = false;
 // Global Variables
 //
 var _CPU = null;
-
+var _MMU = null;
+var _ReadyQueue = null;
 var _OSclock = 0;       // Page 23.
 
 var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.

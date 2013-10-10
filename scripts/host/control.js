@@ -85,6 +85,13 @@ function hostBtnStartOS_click(btn)
     // ... Create and initialize the CPU ...
     _CPU = new Cpu();
     _CPU.init();
+    _MMU = new MemoryManager();
+    _MMU.init();
+    _Memory = new Memory();
+    _Memory.init();
+    _ReadyQueue = new Queue();
+    fillMemory();
+
 
     // ... then set the host clock pulse ...
     _hardwareClockID = setInterval(hostClockPulse, CPU_CLOCK_INTERVAL);
@@ -111,4 +118,10 @@ function hostBtnReset_click(btn)
     // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
     // be reloaded from the server. If it is false or not specified, the browser may reload the 
     // page from its cache, which is not what we want.
+}
+
+function hostBtnStep_click(btn)
+{
+    _CPU.step = true;
+    _CPU.isExecuting = !_CPU.isExecuting;
 }
