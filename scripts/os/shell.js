@@ -454,7 +454,7 @@ function shellLoad(args){
     // console.log(text);
     if(result){
         _CPU.load(text.split(" ")); // This initiates the loading, the cpu which calls mmu
-        _StdIn.putText("program loaded, pid: " + (_MMU.processArray.length - 1 ));
+        _StdIn.putText("program loaded, pid: " + (_MMU.programArray.length - 1 ));
     }
     else{
         _StdIn.putText("INVALID HEX");
@@ -469,27 +469,28 @@ function shellAdvice(args){
 }
 
 function shellRun(args){
-    var pid = parseInt(args[0]);
-    if (typeof pid === 'number'){
+    var pidArg = parseInt(args[0]);
+    if (typeof pidArg === 'number'){
         var pidFound = false;
-        for (var i=0; i<_MMU.processArray.length; i++){
-            var process = _MMU.processArray[i];
+        for (var i=0; i<_MMU.programArray.length; i++){
+            var program = _MMU.programArray[i];
             if(!pidFound){
-                if(process.pid === pid){
-                    _ReadyQueue.enqueue(process);
+                console.log(program.pid +" "+pidArg)
+                if(program.pid === pidArg){
                     _CPU.init(); //Clears the CPU info for new program
+                    _MMU.programArray[i].update("ready");
+                    program = _MMU.programArray[i];
+                    _ReadyQueue.enqueue(program);
                     _CPU.program = _ReadyQueue.dequeue();
                     _CPU.isExecuting = true;
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
-                }
-                else{
+                }else{
                     _StdIn.putText("Pid does not exist")
                 }
             }
         }
-    }
-    else{
+    }else{
         _StdIn.putText("Please provide a proper pid")
     }
 }

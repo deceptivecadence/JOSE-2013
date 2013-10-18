@@ -33,9 +33,11 @@ function Cpu() {
         // Do the real work here. Be sure to set this.isExecuting appropriately.
         if(this.isExecuting && this.PC < this.program.endIndex){
             this.execute(this.fetch());
+            console.log("yes");
         }
         else{
             this.isExecuting = false;
+            console.log("no");
         }
         
     };
