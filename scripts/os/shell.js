@@ -486,6 +486,7 @@ function shellRun(args){
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
                 }else{
+                    console.log(program.pid +" tped"+pidArg)
                     _StdIn.putText("Pid does not exist")
                 }
             }
