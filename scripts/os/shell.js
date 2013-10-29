@@ -481,6 +481,7 @@ function shellRun(args){
                     program = _MMU.programArray[i];
                     _ReadyQueue.enqueue(program);
                     _CPU.program = _ReadyQueue.dequeue();
+                    _CPU.PC = _CPU.program.PC;
                     _CPU.isExecuting = true;
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
