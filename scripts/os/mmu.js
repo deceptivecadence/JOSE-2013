@@ -29,8 +29,10 @@ function MemoryManager(){
 		            this.memory.memoryArray = this.memory.memoryArray.concat(bufferedProgram);
 		            this.endIndex = this.memory.memoryArray.length - 1;
 		            processBlock = new ProcessControlBlock();
+		            console.log(processBlock);
 		            processBlock.init();
 		            this.programArray.push(processBlock);
+		            console.log(processBlock);
 		        }
 	      	}
 	    }
