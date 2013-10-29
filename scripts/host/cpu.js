@@ -219,13 +219,14 @@ function Cpu() {
     //FF
     this.systemCall = function(){
         //var param =  parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        var address = this.Yreg + this.program.offset
         if(this.Xreg === 1){
             _StdIn.putText('' + this.Yreg);
             _StdIn.advanceLine();
             _OsShell.putPrompt();
-        }else if(this.Xreg === 2 && typeof this.checkBoundsReference(this.Yreg) === "number"){
-            console.log("sysCall xreg -2")
-            var address = this.Yreg + this.program.offset;
+        }else if(this.Xreg === 2 && typeof this.checkBoundsReference(address) === "number"){
+            console.log("sysCall xreg- 2")
+            //var address = this.Yreg + this.program.offset;
             var array = [];
             while (_MMU.memory.memoryArray[address] !== '00'){
                 array.push(String.fromCharCode(parseInt(_MMU.memory.memoryArray[address],16)));
