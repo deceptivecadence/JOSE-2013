@@ -12,7 +12,7 @@ function Shell() {
     this.commandList = [];
     this.curses      = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
     this.adviceArray = ["You should probably just talk it out."];
-    this.apologies   = "[sorry]";
+    this.apologies   = "[sorry]"; 
     // Methods
     this.init        = shellInit;
     this.putPrompt   = shellPutPrompt;
@@ -478,17 +478,15 @@ function shellRun(args){
                 console.log(program.pid +" "+pidArg)
                 if(program.pid === pidArg){
                     _CPU.init(); //Clears the CPU info for new program
-                    _MMU.programArray[i].update("ready");
                     program = _MMU.programArray[i];
                     _ReadyQueue.enqueue(program);
                     _CPU.program = _ReadyQueue.dequeue();
                     _CPU.isExecuting = true;
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
-                }else{
-                    console.log(program.pid +" tped"+pidArg)
-                    _StdIn.putText("Pid does not exist")
                 }
+            }else{
+				_StdIn.putText("Pid does not exist")
             }
         }
     }else{
