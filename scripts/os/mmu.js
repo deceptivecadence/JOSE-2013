@@ -33,6 +33,19 @@ function MemoryManager(){
 		            processBlock.init();
 		            this.programArray.push(processBlock);
 		            console.log(processBlock);
+
+		            var table = $("#tablePcb tbody").children()
+		            table.each(function(){
+		            	var spaceFound = false;
+		            	if(!spaceFound && $(this.firstElementChild).text() === ""){
+		            		spaceFound = true;
+		            		$("pidRow")
+		            		$("stateRow")
+		            		$("baseRow")
+		            		$("endRow")
+		            		$("pcRow")
+		            	}
+		            })
 		        }
 	      	}
 	    }

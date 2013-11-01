@@ -475,7 +475,7 @@ function shellRun(args){
         for (var i=0; i<_MMU.programArray.length; i++){
             var program = _MMU.programArray[i];
             if(!pidFound){
-                console.log(program.pid +" "+pidArg)
+                console.log(program.pid +" "+ pidArg)
                 if(program.pid === pidArg){
                     _CPU.init(); //Clears the CPU info for new program
                     program = _MMU.programArray[i];
