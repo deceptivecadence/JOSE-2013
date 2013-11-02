@@ -487,10 +487,15 @@ function shellRun(args){
                     // console.log("I IS READY TO EXECUTE")
                 }
             }else{
-				//_StdIn.putText("Pid does not exist")
+		//_StdIn.putText("Pid does not exist")
             }
         }
     }else{
         _StdIn.putText("Please provide a proper pid")
     }
+}
+
+function shellKill(args){
+    var killedPid = parseInt(args[0]);
+    
 }

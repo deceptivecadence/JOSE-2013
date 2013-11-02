@@ -133,6 +133,8 @@ function krnInterruptHandler(irq, params)    // This is the Interrupt Handler Ro
             break;
         case INVALID_KEYBOARD_INPUT_IRQ:
             osTrapError(params);
+        case MEMORY_OUT_OF_BOUNDS:
+            osProgramOutOfBounds(params)
             break;
         default: 
             krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
@@ -200,4 +202,8 @@ function krnTrapError(msg)
 function osTrapError(params)
 {
     hostLog("Not a valid keyboard input: " + params);
+}
+
+function osProgramOutOfBounds(params){
+    hostLog("Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to access outside of its memory boundry. Process killed.");
 }

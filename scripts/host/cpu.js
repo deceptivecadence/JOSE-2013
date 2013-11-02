@@ -254,7 +254,8 @@ function Cpu() {
             console.log("bounds");*/
             //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
-            return null;
+            this.breakOp();
+            _KernelInterruptQueue.enqueue( new Interrupt(MEMORY_OUT_OF_BOUNDS, [this.program.pid,this.PC]) );
         }
 
     }
@@ -270,7 +271,8 @@ function Cpu() {
             console.log("bounds");*/
             //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
-            return null;
+            this.breakOp();
+            _KernelInterruptQueue.enqueue( new Interrupt(MEMORY_OUT_OF_BOUNDS, [this.program.pid,this.PC]) );
         }
 
     }
@@ -280,7 +282,7 @@ function Cpu() {
     }
 
     this.memoryAccessInMemory = function(addressOne, addressTwo){
-
+        
     }
 
     this.memoryAccess = function(address){

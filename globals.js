@@ -22,6 +22,7 @@ var TIMER_IRQ = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt prio
 var KEYBOARD_IRQ = 1;
 var KTRAP_IRQ = 2;
 var INVALID_KEYBOARD_INPUT_IRQ = 3;
+var MEMORY_OUT_OF_BOUNDS = 4;
 var KEYCODE_HISTORY_CONFLICT = false;
 var MEMORY_LENGTH = 256;
 

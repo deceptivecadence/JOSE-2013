@@ -9,6 +9,7 @@ function MemoryManager(){
 		this.memory = new Memory();
 		this.memory.init();
 		this.programArray = [];
+		this.residentList = [];
 		this.offset = 0;
 	}
 
@@ -39,13 +40,13 @@ function MemoryManager(){
 		            	var spaceFound = false;
 		            	if(!spaceFound && $(this.firstElementChild).text() === ""){
 		            		spaceFound = true;
-		            		$("pidRow").text(processBlock.pid)
-		            		$("stateRow").text(processBlock.state)
-		            		$("baseRow").text(processBlock.baseIndex)
-		            		$("endRow").text(processBlock.endIndex)
-		            		$("pcRow").text(processBlock.PC)
+		            		$("pidRow").text(processBlock.pid);
+		            		$("stateRow").text(processBlock.state);
+		            		$("baseRow").text(processBlock.baseIndex);
+		            		$("endRow").text(processBlock.endIndex);
+		            		$("pcRow").text(processBlock.PC);
 		            	}
-		            })
+		            });
 		        }
 	      	}
 	    }
