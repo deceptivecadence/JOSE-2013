@@ -39,11 +39,11 @@ function MemoryManager(){
 		            	var spaceFound = false;
 		            	if(!spaceFound && $(this.firstElementChild).text() === ""){
 		            		spaceFound = true;
-		            		$("pidRow")
-		            		$("stateRow")
-		            		$("baseRow")
-		            		$("endRow")
-		            		$("pcRow")
+		            		$("pidRow").text(processBlock.pid)
+		            		$("stateRow").text(processBlock.state)
+		            		$("baseRow").text(processBlock.baseIndex)
+		            		$("endRow").text(processBlock.endIndex)
+		            		$("pcRow").text(processBlock.PC)
 		            	}
 		            })
 		        }
