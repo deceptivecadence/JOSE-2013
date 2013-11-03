@@ -36,15 +36,16 @@ function MemoryManager(){
 		            console.log(processBlock);
 
 		            var table = $("#tablePcb tbody").children()
+		            var spaceFound = false;
 		            table.each(function(){
-		            	var spaceFound = false;
 		            	if(!spaceFound && $(this.firstElementChild).text() === ""){
 		            		spaceFound = true;
-		            		$("pidRow").text(processBlock.pid);
-		            		$("stateRow").text(processBlock.state);
-		            		$("baseRow").text(processBlock.baseIndex);
-		            		$("endRow").text(processBlock.endIndex);
-		            		$("pcRow").text(processBlock.PC);
+		            		console.log($(this.firstElementChild)+ " pcb table if");
+		            		$("#pidRow").text(processBlock.pid);
+		            		$("#stateRow").text(processBlock.state);
+		            		$("#baseRow").text(processBlock.baseIndex);
+		            		$("#endRow").text(processBlock.endIndex);
+		            		$("#pcRow").text(processBlock.PC);
 		            	}
 		            });
 		        }

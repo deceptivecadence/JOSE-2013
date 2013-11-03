@@ -42,4 +42,26 @@ function Queue()
         }
         return retVal;
     };
+
+    this.containsProgram = function(pid){
+        for (var i=0; i<this.q.length;i++){
+            if(this.q[i].pid === parseInt(pid)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    this.removeProgram = function(pid){
+        for (var i=0; i<this.q.length;i++){
+            if(this.q[i].pid === parseInt(pid)){
+                if(i===0){
+                    var elementsBefore = this.q.slice(0,i+1);
+                }
+                var elementsBefore = this.q.slice(0,i);
+                var elementsAfter  = this.q.slice(i+1);
+                this.q = elementsBefore.concat(elementsAfter);
+            }
+        }
+    }
 }

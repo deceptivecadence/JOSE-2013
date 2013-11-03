@@ -29,16 +29,16 @@ function updateDisplay(){
 	$("#cpuyReg").text(_CPU.Yreg);
 	$("#cpuzFlag").text(_CPU.Zflag);
 
-    if(programArray.length !== 0){
+    if(_MMU.programArray.length !== 0){
         for (var i = 0; i<_MMU.programArray.length;i++) {
             var table = $("#tablePcb tbody").children()
             table.each(function(){
                 if($(this.firstElementChild).text() == _MMU.programArray[i].pid){
-                    $("pidRow").text(_MMU.programArray[i].pid)
-                    $("stateRow").text(_MMU.programArray[i].state)
-                    $("baseRow").text(_MMU.programArray[i].baseIndex)
-                    $("endRow").text(_MMU.programArray[i].endIndex)
-                    $("pcRow").text(_MMU.programArray[i].PC)
+                    $("#pidRow").text(_MMU.programArray[i].pid)
+                    $("#stateRow").text(_MMU.programArray[i].state)
+                    $("#baseRow").text(_MMU.programArray[i].baseIndex)
+                    $("#endRow").text(_MMU.programArray[i].endIndex)
+                    $("#pcRow").text(_MMU.programArray[i].PC)
                 }
             })
         }

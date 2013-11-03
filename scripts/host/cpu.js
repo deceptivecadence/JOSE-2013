@@ -90,7 +90,7 @@ function Cpu() {
             case "D0":this.branchIfZero(); break;
             case "EE":this.incrementByByte(); break;
             case "FF":this.systemCall(); break;
-            default: this.breakOp(); break; //TODO: ERROR
+            default: this.invalidOpCode(); break;
         }
         //console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
         console.log("Last ran: "+inst + ", with PC = after: "+ (this.PC  - 256));
@@ -177,6 +177,11 @@ function Cpu() {
         this.isExecuting = false;
     }
 
+    this.terminate = function(){
+        this.program.update('terminated');
+        this.isExecuting = false;
+    }
+
     //EC
     this.compareByteMemToX = function(){
         var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
@@ -254,7 +259,7 @@ function Cpu() {
             console.log("bounds");*/
             //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
-            this.breakOp();
+            this.terminate();
             _KernelInterruptQueue.enqueue( new Interrupt(MEMORY_OUT_OF_BOUNDS, [this.program.pid,this.PC]) );
         }
 
@@ -271,12 +276,15 @@ function Cpu() {
             console.log("bounds");*/
             //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
-            this.breakOp();
+            this.terminate();
             _KernelInterruptQueue.enqueue( new Interrupt(MEMORY_OUT_OF_BOUNDS, [this.program.pid,this.PC]) );
         }
 
     }
-
+    this.invalidOpCode = function(){
+        this.terminate();
+        _KernelInterruptQueue.enqueue( new Interrupt(INVALID_OP_CODE, [this.program.pid,this.PC]) );
+    }
     this.incrementPC = function(amount){
         this.PC = this.PC + amount
     }

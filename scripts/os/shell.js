@@ -131,6 +131,13 @@ function shellInit() {
     sc.function = shellRun;
     this.commandList[this.commandList.length] = sc;
 
+    //kill
+    sc = new ShellCommand();
+    sc.command = "kill";
+    sc.description = " - <pid> kill the program specified by the pid"
+    sc.function = shellKill;
+    this.commandList[this.commandList.length] = sc;
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -497,5 +504,7 @@ function shellRun(args){
 
 function shellKill(args){
     var killedPid = parseInt(args[0]);
-    
+    if(_ReadyQueue.containsProgram(killedPid)){
+        _ReadyQueue.removeProgram(killedPid)
+    }
 }
