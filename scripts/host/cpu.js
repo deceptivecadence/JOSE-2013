@@ -276,13 +276,11 @@ function Cpu() {
             console.log("bounds");*/
             //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
-            this.terminate();
             _KernelInterruptQueue.enqueue( new Interrupt(MEMORY_OUT_OF_BOUNDS, [this.program.pid,this.PC]) );
         }
 
     }
     this.invalidOpCode = function(){
-        this.terminate();
         _KernelInterruptQueue.enqueue( new Interrupt(INVALID_OP_CODE, [this.program.pid,this.PC]) );
     }
     this.incrementPC = function(amount){

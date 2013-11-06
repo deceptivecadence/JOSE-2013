@@ -138,6 +138,13 @@ function shellInit() {
     sc.function = shellKill;
     this.commandList[this.commandList.length] = sc;
 
+    //listPid
+    sc = new ShellCommand();
+    sc.command = "lpid";
+    sc.description = "- Lists all the running processes' pids"
+    sc.function = shellLPid;
+    this.commandList[this.commandList.length] = sc;
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -498,13 +505,28 @@ function shellRun(args){
             }
         }
     }else{
-        _StdIn.putText("Please provide a proper pid")
+        _StdIn.putText("Please provide a proper pid");
     }
 }
 
 function shellKill(args){
     var killedPid = parseInt(args[0]);
+    var runningProgram = _CPU.program;
     if(_ReadyQueue.containsProgram(killedPid)){
         _ReadyQueue.removeProgram(killedPid)
+        console.log("kill first if")
     }
+    if(runningProgram.pid === killedPid){
+        _CPU.isExecuting = false;
+        runningProgram.update("killed");
+        _StdIn.putText("Process with pid: "+args[0]+" has been killed")
+    }
+}
+
+function shellLPid(args){
+    _StdIn.putText("Active Process: "+_ReadyQueue.toStringSpecific("pid"));
+}
+
+function shellRunAll(args){
+    
 }

@@ -45,7 +45,7 @@ h3 {
 #divMemory{
 	display: inline-block;
    	width:  auto;
-   	height: 400px;
+   	height: 550px;
    	float: right;
    	overflow: scroll;
 }
@@ -54,8 +54,9 @@ table{
 }
 
 #divPcb{
-	clear: both;
-	margin-left: 0;
+	margin-top: -200px;
+	display: inline-block;
+	margin-left: 0px;
 	position: relative;
 	width: 525px;
 	float: left;

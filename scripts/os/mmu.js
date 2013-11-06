@@ -10,6 +10,7 @@ function MemoryManager(){
 		this.memory.init();
 		this.programArray = [];
 		this.residentList = [];
+		this.partIsAvailable=[0,0,0];
 		this.offset = 0;
 	}
 
@@ -23,7 +24,7 @@ function MemoryManager(){
 					for (var i = 0; i < MEMORY_LENGTH - program.length; i++){
 						buffer.push("00");
 					}
-					
+					this.partIsAvailable[this.programArray.length] = 1;
 					this.offset = this.programArray.length * MEMORY_LENGTH;
 					bufferedProgram = program.concat(buffer);
 		        	this.baseIndex = this.memory.memoryArray.length;

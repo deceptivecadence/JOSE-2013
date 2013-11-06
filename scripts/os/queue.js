@@ -33,7 +33,7 @@ function Queue()
         }
         return retVal;        
     };
-    
+
     this.toString = function() {
         var retVal = "";
         for (var i in this.q)
@@ -41,6 +41,18 @@ function Queue()
             retVal += "[" + this.q[i] + "] ";
         }
         return retVal;
+    };
+
+    this.toStringSpecific = function(property) {
+        var retVal = "";
+        if(property === "pid"){
+            for (var i in this.q)
+            {
+                retVal += "[" + this.q[i].pid + "] ";
+            }
+            return retVal;
+        }
+        
     };
 
     this.containsProgram = function(pid){
