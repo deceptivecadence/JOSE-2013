@@ -13,7 +13,7 @@ function CpuScheduler(){
 			if(this.counter % this.quantum === 0 || _CPU.program.state==="ended"){
 				_KernelInterruptQueue.enqueue( new Interrupt(SOFTWARE_CONTEXT_SWITCH, []));
 			}
-			this.counter += 1;
+			//this.counter += 1;
 		}else if (_ReadyQueue.getSize() === 0 && _CPU.program.state==="ended"){
 			_CPU.isExecuting = false;
 		}else{
