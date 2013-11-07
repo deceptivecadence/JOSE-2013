@@ -31,22 +31,26 @@ function MemoryManager(){
 		            this.memory.memoryArray = this.memory.memoryArray.concat(bufferedProgram);
 		            this.endIndex = this.memory.memoryArray.length - 1;
 		            processBlock = new ProcessControlBlock();
-		            console.log(processBlock);
+		            //console.log(processBlock);
 		            processBlock.init();
 		            this.programArray.push(processBlock);
-		            console.log(processBlock);
+		            //console.log(processBlock);
 
 		            var table = $("#tablePcb tbody").children()
 		            var spaceFound = false;
 		            table.each(function(){
-		            	if(!spaceFound && $(this.firstElementChild).text() === ""){
+		            	console.log("program array length: "+_MMU.programArray.length)
+		            	console.log($(this.firstElementChild).text());
+		            	if(!spaceFound && ($(this.firstElementChild).text() === "")){
 		            		spaceFound = true;
-		            		console.log($(this.firstElementChild)+ " pcb table if");
-		            		$("#pidRow").text(processBlock.pid);
-		            		$("#stateRow").text(processBlock.state);
-		            		$("#baseRow").text(processBlock.baseIndex);
-		            		$("#endRow").text(processBlock.endIndex);
-		            		$("#pcRow").text(processBlock.PC);
+		            		console.log(" pcb table if");
+		            		console.log(processBlock.pid);
+		            		$(this).find("#pidRow").text(processBlock.pid);
+		            		$(this).find("#stateRow").text(processBlock.state);
+		            		$(this).find("#baseRow").text(processBlock.baseIndex);
+		            		$(this).find("#endRow").text(processBlock.endIndex);
+		            		$(this).find("#pcRow").text(processBlock.PC);
+		            		console.log($(this.firstElementChild).text());
 		            	}
 		            });
 		        }

@@ -31,13 +31,15 @@ function Cpu() {
         krnTrace("CPU cycle");
         // TODO: Accumulate CPU usage and profiling statistics here.
         // Do the real work here. Be sure to set this.isExecuting appropriately.
+        
+        _CpuScheduler.check();
         if(this.isExecuting && this.PC < this.program.endIndex){    
             this.execute(this.fetch());
-            console.log("yes");
+            //console.log("yes");
         }
         else{
             this.isExecuting = false;
-            console.log("no");
+            //console.log("no");
         }
         
     };
@@ -45,6 +47,16 @@ function Cpu() {
     //program - program (string array)
     this.load = function(program){ 
         _MMU.load(program);
+    }
+
+    this.loadProgram = function(pcb){
+        this.program = pcb;
+        this.PC    = pcb.PC;     // Program Counter
+        this.Acc   = pcb.Acc;     // Accumulator
+        this.Xreg  = pcb.Xreg;     // X register
+        this.Yreg  = pcb.Yreg;     // Y register
+        this.Zflag = pcb.Zflag;
+        pcb.update("running");  
     }
 
     this.fetch = function(){

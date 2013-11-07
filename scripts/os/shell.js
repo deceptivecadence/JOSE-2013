@@ -145,6 +145,13 @@ function shellInit() {
     sc.function = shellLPid;
     this.commandList[this.commandList.length] = sc;
 
+    //run all
+    sc = new ShellCommand();
+    sc.command = "runall";
+    sc.description = "- Runs all programs loaded into memory"
+    sc.function = shellRunAll;
+    this.commandList[this.commandList.length] = sc;
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -494,8 +501,7 @@ function shellRun(args){
                     _CPU.init(); //Clears the CPU info for new program
                     program = _MMU.programArray[i];
                     _ReadyQueue.enqueue(program);
-                    _CPU.program = _ReadyQueue.dequeue();
-                    _CPU.PC = _CPU.program.PC;
+                    _CPU.loadProgram(_ReadyQueue.dequeue());
                     _CPU.isExecuting = true;
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
@@ -528,5 +534,10 @@ function shellLPid(args){
 }
 
 function shellRunAll(args){
-    
+
+    for(var i=0; i<_MMU.programArray.length; i++){
+        _ReadyQueue.enqueue(_MMU.programArray[i]);
+    }
+    _CPU.loadProgram(_ReadyQueue.dequeue());
+    _CPU.isExecuting = true;
 }

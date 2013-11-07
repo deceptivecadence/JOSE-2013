@@ -34,6 +34,7 @@ var MEMORY_LENGTH = 256;
 var _CPU = null;
 var _MMU = null;
 var _ReadyQueue = null;
+var _CpuScheduler = null;
 var _OSclock = 0;       // Page 23.
 
 var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.
@@ -61,6 +62,7 @@ var _Console = null;
 var _OsShell = null;
 
 // At least this OS is not trying to kill you. (Yet.)
+var _SarcasticMode = false;
 var _SarcasticMode = false;
 
 // Global Device Driver Objects - page 12
