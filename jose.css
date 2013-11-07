@@ -60,6 +60,7 @@ table{
 	position: relative;
 	width: 525px;
 	float: left;
+	margin-left: -10px;
 }
 
 .pcbtable{
@@ -72,6 +73,7 @@ table{
 
 #divCpu{
 	display: inline-block;
+	margin-left: -10px;
 }
 
 td{

@@ -11,10 +11,10 @@ function CpuScheduler(){
 	this.check = function(){
 		if(_ReadyQueue.getSize()>0){
 			if(this.counter % this.quantum === 0 || _CPU.program.state==="ended"){
-				this.cSwitch();
+				_KernelInterruptQueue.enqueue( new Interrupt(SOFTWARE_CONTEXT_SWITCH, []));
 			}
 			this.counter += 1;
-		}else if (_CPU.program === null){
+		}else if (_ReadyQueue.getSize() === 0 && _CPU.program.state==="ended"){
 			_CPU.isExecuting = false;
 		}else{
 			//_CPU.program = null;
@@ -29,7 +29,9 @@ function CpuScheduler(){
 			_ReadyQueue.enqueue(_CPU.program);
 		}
 		if(_ReadyQueue.getSize()>0){
-			_CPU.loadProgram(_ReadyQueue.dequeue());
+			var program = _ReadyQueue.dequeue();
+			hostLog("Switched to program with pid: "+program.pid);
+			_CPU.loadProgram(program);
 			_CPU.isExecuting = true;
 		}
 	}

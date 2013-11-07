@@ -213,13 +213,13 @@ function Cpu() {
     //D0
     this.branchIfZero = function(){
         if(this.Zflag == 0){
-            console.log(this.PC)
+            //console.log(this.PC)
             var additionalBranchBytes = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
-            console.log(additionalBranchBytes)
+            //console.log(additionalBranchBytes)
             this.incrementPC(2);
-            console.log(this.PC)
+            //console.log(this.PC)
             var newAddress = (this.PC + additionalBranchBytes) % this.program.limit;
-            console.log("****"+newAddress);
+            //console.log("****"+newAddress);
             //var address = this.checkBounds(newAddress);
             this.PC = newAddress + this.program.offset;
         }else{

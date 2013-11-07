@@ -18,7 +18,7 @@ function MemoryManager(){
 		if (this.memory.memoryArray.length !== MEMORY_LENGTH * 3){
 	        if($.isArray(program)){
 	        	if(program.length <= MEMORY_LENGTH){
-	        		console.log("in mmu loaded");
+	        		//console.log("in mmu loaded");
 					buffer = [];
 					
 					for (var i = 0; i < MEMORY_LENGTH - program.length; i++){
@@ -39,15 +39,15 @@ function MemoryManager(){
 		            var table = $("#tablePcb tbody").children()
 		            var spaceFound = false;
 		            table.each(function(){
-		            	console.log("program array length: "+_MMU.programArray.length)
+		            	//console.log("program array length: "+_MMU.programArray.length)
 		            	//console.log($(this.firstElementChild).text());
-		            	console.log(spaceFound);
+		            	//console.log(spaceFound);
 		            	//console.log($(this).find("#pidRow"));
 		            	if(!spaceFound && $(this).find("#pidRow").text() === "-"){
 		            		spaceFound = true;
 		            		//$(this).first().text(processBlock.pid);
-		            		console.log(" pcb table if");
-		            		console.log(processBlock.pid);
+		            		//console.log(" pcb table if");
+		            		//console.log(processBlock.pid);
 		            		$(this).find("#pidRow").text(processBlock.pid);
 		            		$(this).find("#stateRow").text(processBlock.state);
 		            		$(this).find("#baseRow").text(processBlock.baseIndex);

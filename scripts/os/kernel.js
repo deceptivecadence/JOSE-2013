@@ -140,6 +140,9 @@ function krnInterruptHandler(irq, params)    // This is the Interrupt Handler Ro
         case MEMORY_OUT_OF_BOUNDS:
             osProgramOutOfBounds(params)
             break;
+        case SOFTWARE_CONTEXT_SWITCH:
+            osSoftwareContextSwitch(params);
+            break;
         default: 
             krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
     }
@@ -220,4 +223,8 @@ function osInvalidOpCode(params){
     var message = "Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to execute with an invalid op code. Process killed.";
     hostLog(message);
     _StdIn.putText(message);
+}
+
+function osSoftwareContextSwitch(params){
+    _CpuScheduler.cSwitch();
 }

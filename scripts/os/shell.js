@@ -152,6 +152,13 @@ function shellInit() {
     sc.function = shellRunAll;
     this.commandList[this.commandList.length] = sc;
 
+    //quantum
+    sc = new ShellCommand();
+    sc.command = "quantum";
+    sc.description = "- <int> changes the interval of Round Robin scheduling"
+    sc.function = shellQuantum;
+    this.commandList[this.commandList.length] = sc;
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -496,7 +503,7 @@ function shellRun(args){
         for (var i=0; i<_MMU.programArray.length; i++){
             var program = _MMU.programArray[i];
             if(!pidFound){
-                console.log(program.pid +" "+ pidArg)
+                //console.log(program.pid +" "+ pidArg)
                 if(program.pid === pidArg){
                     _CPU.init(); //Clears the CPU info for new program
                     program = _MMU.programArray[i];
@@ -520,7 +527,7 @@ function shellKill(args){
     var runningProgram = _CPU.program;
     if(_ReadyQueue.containsProgram(killedPid)){
         _ReadyQueue.removeProgram(killedPid)
-        console.log("kill first if")
+        //console.log("kill first if")
     }
     if(runningProgram.pid === killedPid){
         _CPU.isExecuting = false;
@@ -530,7 +537,7 @@ function shellKill(args){
 }
 
 function shellLPid(args){
-    _StdIn.putText("Active Process: "+_ReadyQueue.toStringSpecific("pid"));
+    _StdIn.putText("Active Process: "+"["+_CPU.program.pid+"] "+_ReadyQueue.toStringSpecific("pid"));
 }
 
 function shellRunAll(args){
@@ -540,4 +547,11 @@ function shellRunAll(args){
     }
     _CPU.loadProgram(_ReadyQueue.dequeue());
     _CPU.isExecuting = true;
+}
+
+function shellQuantum(args){
+    var quantum = parseInt(args[0])
+    if(typeof quantum === "number"){
+        _CpuScheduler.quantum = quantum;
+    }
 }
