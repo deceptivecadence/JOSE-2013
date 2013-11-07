@@ -13,7 +13,7 @@
    
    <!--Adds jQuery-->
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script src="https://raw.github.com/caleb531/jcanvas/master/jcanvas.min.js"></script>
+   <script src="https://raw.github.com/caleb531/jcanvas/master/jcanvas.js"></script>
    
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
    <script type="text/javascript" src="globals.js"></script>	
@@ -36,6 +36,7 @@
    <script type="text/javascript" src="scripts/os/kernel.js"></script>
    <script type="text/javascript" src="scripts/os/mmu.js"></script>
    <script type="text/javascript" src="scripts/os/pcb.js"></script>
+   <script type="text/javascript" src="scripts/os/cpuScheduler.js"></script>
 
    <!-- Other Routines -->
    <script type="text/javascript" src="scripts/utils.js"></script>
@@ -108,31 +109,7 @@
       </canvas>
    </div>
    <div id="hardwareDisplay">
-        <div id="divMemory">  
-            <label>Memory</label>
-            <br>
-            <table id="tableMemory" border="1">
-                <thead>
-                    <tr>
-                        <td>X</td>
-                        <td>0</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>
-                </thead>
-
-                <tbody id="bodyMemory">
-
-                </tbody>
-            </table>     
-        </div>
-
-       <div id="divCpu">
+        <div id="divCpu">
            <label>CPU</label>
            <br>
            <table id="tableCpu" border="1">
@@ -157,6 +134,74 @@
                </tbody>
            </table>
        </div>
+        
+        <div id="divMemory">  
+            <label>Memory</label>
+            <br>
+            <table id="tableMemory" border="1">
+                <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                </thead>
+
+                <tbody id="bodyMemory">
+
+                </tbody>
+            </table>     
+        </div>
+
+       <div id="divPcb">
+            <label>PCB</label>
+            <br>
+            <table id="tablePcb" class="pcbtable" border="1">
+                <thead>
+                    <tr>
+                        <td>Pid</td>
+                        <td>State</td>
+                        <td>Base</td>
+                        <td>End</td>
+                        <td>PC</td>
+                        <!-- <td>Acc</td>
+                        <td>Xreg</td>
+                        <td>Yreg</td>
+                        <td>Zflag</td> -->
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td id="pidRow">-</td>
+                        <td id="stateRow">-</td>
+                        <td id="baseRow">-</td>
+                        <td id="endRow">-</td>
+                        <td id="pcRow">-</td>
+                    </tr>
+                    <tr>
+                        <td id="pidRow">-</td>
+                        <td id="stateRow">-</td>
+                        <td id="baseRow">-</td>
+                        <td id="endRow">-</td>
+                        <td id="pcRow">-</td>
+                    </tr>
+                    <tr>
+                        <td id="pidRow">-</td>
+                        <td id="stateRow">-</td>
+                        <td id="baseRow">-</td>
+                        <td id="endRow">-</td>
+                        <td id="pcRow">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
    <div id="divLog" style="margin-left:520px;">
       <label>
@@ -164,7 +209,7 @@
          <br>
          <textarea name="taLog"
                    id  ="taLog"
-                   rows="26"
+                   rows="22"
                    cols="30"
          ></textarea>
       </label>
@@ -176,7 +221,7 @@
          <br>
          <textarea name="taProgramInput"
                    id  ="taProgramInput"
-                   rows="8"
+                   rows="5"
                    cols="30"
          ></textarea>
       </label>

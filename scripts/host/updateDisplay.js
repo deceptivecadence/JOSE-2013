@@ -28,4 +28,17 @@ function updateDisplay(){
 	$("#cpuxReg").text(_CPU.Xreg);
 	$("#cpuyReg").text(_CPU.Yreg);
 	$("#cpuzFlag").text(_CPU.Zflag);
+
+    for (var i = 0; i<_MMU.programArray.length;i++) {
+        var table = $("#tablePcb tbody").children()
+        table.each(function(){
+            if($(this).find("#pidRow").text() == _MMU.programArray[i].pid){
+                $(this).find("#pidRow").text(_MMU.programArray[i].pid)
+                $(this).find("#stateRow").text(_MMU.programArray[i].state)
+                $(this).find("#baseRow").text(_MMU.programArray[i].baseIndex)
+                $(this).find("#endRow").text(_MMU.programArray[i].endIndex)
+                $(this).find("#pcRow").text(_MMU.programArray[i].PC)
+            }
+        })
+    }
 }

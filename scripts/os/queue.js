@@ -33,7 +33,7 @@ function Queue()
         }
         return retVal;        
     };
-    
+
     this.toString = function() {
         var retVal = "";
         for (var i in this.q)
@@ -42,4 +42,38 @@ function Queue()
         }
         return retVal;
     };
+
+    this.toStringSpecific = function(property) {
+        var retVal = "";
+        if(property === "pid"){
+            for (var i in this.q)
+            {
+                retVal += "[" + this.q[i].pid + "] ";
+            }
+            return retVal;
+        }
+        
+    };
+
+    this.containsProgram = function(pid){
+        for (var i=0; i<this.q.length;i++){
+            if(this.q[i].pid === parseInt(pid)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    this.removeProgram = function(pid){
+        for (var i=0; i<this.q.length;i++){
+            if(this.q[i].pid === parseInt(pid)){
+                if(i===0){
+                    var elementsBefore = this.q.slice(0,i+1);
+                }
+                var elementsBefore = this.q.slice(0,i);
+                var elementsAfter  = this.q.slice(i+1);
+                this.q = elementsBefore.concat(elementsAfter);
+            }
+        }
+    }
 }

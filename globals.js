@@ -22,7 +22,11 @@ var TIMER_IRQ = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt prio
 var KEYBOARD_IRQ = 1;
 var KTRAP_IRQ = 2;
 var INVALID_KEYBOARD_INPUT_IRQ = 3;
+var MEMORY_OUT_OF_BOUNDS = 4;
+var INVALID_OP_CODE = 5;
+var SOFTWARE_CONTEXT_SWITCH = 6;
 var KEYCODE_HISTORY_CONFLICT = false;
+var MEMORY_LENGTH = 256;
 
 
 //
@@ -31,9 +35,10 @@ var KEYCODE_HISTORY_CONFLICT = false;
 var _CPU = null;
 var _MMU = null;
 var _ReadyQueue = null;
+var _CpuScheduler = null;
 var _OSclock = 0;       // Page 23.
 
-var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.
+//var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.
 
 var _Canvas = null;               // Initialized in hostInit().
 var _DrawingContext = null;       // Initialized in hostInit().
@@ -58,6 +63,7 @@ var _Console = null;
 var _OsShell = null;
 
 // At least this OS is not trying to kill you. (Yet.)
+var _SarcasticMode = false;
 var _SarcasticMode = false;
 
 // Global Device Driver Objects - page 12

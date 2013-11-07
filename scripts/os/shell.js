@@ -12,7 +12,7 @@ function Shell() {
     this.commandList = [];
     this.curses      = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
     this.adviceArray = ["You should probably just talk it out."];
-    this.apologies   = "[sorry]";
+    this.apologies   = "[sorry]"; 
     // Methods
     this.init        = shellInit;
     this.putPrompt   = shellPutPrompt;
@@ -129,6 +129,34 @@ function shellInit() {
     sc.command = "run";
     sc.description = " - <pid> run the program specified by the pid"
     sc.function = shellRun;
+    this.commandList[this.commandList.length] = sc;
+
+    //kill
+    sc = new ShellCommand();
+    sc.command = "kill";
+    sc.description = " - <pid> kill the program specified by the pid"
+    sc.function = shellKill;
+    this.commandList[this.commandList.length] = sc;
+
+    //listPid
+    sc = new ShellCommand();
+    sc.command = "lpid";
+    sc.description = "- Lists all the running processes' pids"
+    sc.function = shellLPid;
+    this.commandList[this.commandList.length] = sc;
+
+    //run all
+    sc = new ShellCommand();
+    sc.command = "runall";
+    sc.description = "- Runs all programs loaded into memory"
+    sc.function = shellRunAll;
+    this.commandList[this.commandList.length] = sc;
+
+    //quantum
+    sc = new ShellCommand();
+    sc.command = "quantum";
+    sc.description = "- <int> changes the interval of Round Robin scheduling"
+    sc.function = shellQuantum;
     this.commandList[this.commandList.length] = sc;
 
     // processes - list the running processes and their IDs
@@ -454,7 +482,7 @@ function shellLoad(args){
     // console.log(text);
     if(result){
         _CPU.load(text.split(" ")); // This initiates the loading, the cpu which calls mmu
-        _StdIn.putText("program loaded, pid: " + (_MMU.processArray.length - 1 ));
+        _StdIn.putText("program loaded, pid: " + (_MMU.programArray.length - 1 ));
     }
     else{
         _StdIn.putText("INVALID HEX");
@@ -469,27 +497,61 @@ function shellAdvice(args){
 }
 
 function shellRun(args){
-    var pid = parseInt(args[0]);
-    if (typeof pid === 'number'){
+    var pidArg = parseInt(args[0]);
+    if (typeof pidArg === 'number'){
         var pidFound = false;
-        for (var i=0; i<_MMU.processArray.length; i++){
-            var process = _MMU.processArray[i];
+        for (var i=0; i<_MMU.programArray.length; i++){
+            var program = _MMU.programArray[i];
             if(!pidFound){
-                if(process.pid === pid){
-                    _ReadyQueue.enqueue(process);
+                //console.log(program.pid +" "+ pidArg)
+                if(program.pid === pidArg){
                     _CPU.init(); //Clears the CPU info for new program
-                    _CPU.program = _ReadyQueue.dequeue();
+                    program = _MMU.programArray[i];
+                    _ReadyQueue.enqueue(program);
+                    _CPU.loadProgram(_ReadyQueue.dequeue());
                     _CPU.isExecuting = true;
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
                 }
-                else{
-                    _StdIn.putText("Pid does not exist")
-                }
+            }else{
+		//_StdIn.putText("Pid does not exist")
             }
         }
+    }else{
+        _StdIn.putText("Please provide a proper pid");
     }
-    else{
-        _StdIn.putText("Please provide a proper pid")
+}
+
+function shellKill(args){
+    var killedPid = parseInt(args[0]);
+    var runningProgram = _CPU.program;
+    if(_ReadyQueue.containsProgram(killedPid)){
+        _ReadyQueue.removeProgram(killedPid)
+        //console.log("kill first if")
+    }
+    if(runningProgram.pid === killedPid){
+        _CPU.isExecuting = false;
+        runningProgram.update("killed");
+        _StdIn.putText("Process with pid: "+args[0]+" has been killed")
+    }
+}
+
+function shellLPid(args){
+    _StdIn.putText("Active Process: "+"["+_CPU.program.pid+"] "+_ReadyQueue.toStringSpecific("pid"));
+}
+
+function shellRunAll(args){
+
+    for(var i=0; i<_MMU.programArray.length; i++){
+        _ReadyQueue.enqueue(_MMU.programArray[i]);
+    }
+    _CPU.loadProgram(_ReadyQueue.dequeue());
+    _CPU.isExecuting = true;
+}
+
+function shellQuantum(args){
+    var quantum = parseInt(args[0])
+    if(typeof quantum === "number"){
+        _CpuScheduler.quantum = quantum;
     }
 }

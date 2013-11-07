@@ -1,5 +1,4 @@
 /* alanbbos.css */
-
 body {
    background: #909193 url(images/linen.png) repeat;
    font-family: Helvetica, Verdana, Arial, sans-serif;
@@ -40,25 +39,41 @@ h3 {
 
 #hardwareDisplay{
 	float: right;
-	width: 291px;
+	width: 525px;
 }
 
 #divMemory{
+	display: inline-block;
    	width:  auto;
-   	height: 500px;
+   	height: 550px;
    	float: right;
    	overflow: scroll;
+}
+table{
+	border: 1px solid black;
+}
+
+#divPcb{
+	margin-top: -200px;
+	display: inline-block;
+	margin-left: 0px;
+	position: relative;
+	width: 525px;
+	float: left;
+	margin-left: -10px;
+}
+
+.pcbtable{
+	display: inline-block;
 }
 
 #tableMemory{
    	float: right;
-   	border: 1px solid black;
 }
 
 #divCpu{
-	clear: both;
-	margin-left: 0;
-	position: relative;
+	display: inline-block;
+	margin-left: -10px;
 }
 
 td{
