@@ -209,11 +209,15 @@ function osTrapError(params)
 }
 
 function osProgramOutOfBounds(params){
-    this.terminate();
-    hostLog("Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to access outside of its memory boundry. Process killed.");
+    _CPU.terminate();
+    var message = "Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to access outside of its memory boundry. Process killed.";
+    hostLog(message);
+    _StdIn.putText(message);
 }
 
 function osInvalidOpCode(params){
-    this.terminate();
-    hostLog("Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to execute with an invalid op code. Process killed.");
+    _CPU.terminate();
+    var message = "Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to execute with an invalid op code. Process killed.";
+    hostLog(message);
+    _StdIn.putText(message);
 }

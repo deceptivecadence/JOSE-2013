@@ -38,7 +38,8 @@ function Cpu() {
             //console.log("yes");
         }
         else{
-            this.isExecuting = false;
+            _CpuScheduler.check();
+            //this.isExecuting = false;
             //console.log("no");
         }
         
@@ -105,7 +106,7 @@ function Cpu() {
             default: this.invalidOpCode(); break;
         }
         //console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
-        console.log("Last ran: "+inst + ", with PC = after: "+ (this.PC  - 256));
+        //console.log("Last ran: "+inst + ", with PC = after: "+ (this.PC  - 256));
     }
 
     //A9
@@ -186,7 +187,7 @@ function Cpu() {
     //00
     this.breakOp = function(){
         this.program.update('ended');
-        this.isExecuting = false;
+        _CpuScheduler.check();
     }
 
     this.terminate = function(){
@@ -199,7 +200,7 @@ function Cpu() {
         var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
         var value = this.checkBoundsReference(address);
         if(typeof value === "number"){
-            console.log("*******"+address+"*********"+this.Xreg+" "+value+"*********")
+            //console.log("*******"+address+"*********"+this.Xreg+" "+value+"*********")
             if(value === this.Xreg){
                 this.Zflag = 1;
             }else{
@@ -212,9 +213,13 @@ function Cpu() {
     //D0
     this.branchIfZero = function(){
         if(this.Zflag == 0){
+            console.log(this.PC)
             var additionalBranchBytes = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+            console.log(additionalBranchBytes)
             this.incrementPC(2);
+            console.log(this.PC)
             var newAddress = (this.PC + additionalBranchBytes) % this.program.limit;
+            console.log("****"+newAddress);
             //var address = this.checkBounds(newAddress);
             this.PC = newAddress + this.program.offset;
         }else{
@@ -242,7 +247,7 @@ function Cpu() {
             _StdIn.advanceLine();
             _OsShell.putPrompt();
         }else if(this.Xreg === 2 && typeof this.checkBoundsReference(address) === "number"){
-            console.log("sysCall xreg- 2")
+            //console.log("sysCall xreg- 2")
             //var address = this.Yreg + this.program.offset;
             var array = [];
             while (_MMU.memory.memoryArray[address] !== '00'){
@@ -271,7 +276,6 @@ function Cpu() {
             console.log("bounds");*/
             //this.init(); //resets cpu attributes since program failed
             //TODO:raise memory bounds error
-            this.terminate();
             _KernelInterruptQueue.enqueue( new Interrupt(MEMORY_OUT_OF_BOUNDS, [this.program.pid,this.PC]) );
         }
 

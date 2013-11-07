@@ -37,7 +37,7 @@ var _ReadyQueue = null;
 var _CpuScheduler = null;
 var _OSclock = 0;       // Page 23.
 
-var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.
+//var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.
 
 var _Canvas = null;               // Initialized in hostInit().
 var _DrawingContext = null;       // Initialized in hostInit().

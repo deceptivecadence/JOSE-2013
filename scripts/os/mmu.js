@@ -40,9 +40,12 @@ function MemoryManager(){
 		            var spaceFound = false;
 		            table.each(function(){
 		            	console.log("program array length: "+_MMU.programArray.length)
-		            	console.log($(this.firstElementChild).text());
-		            	if(!spaceFound && ($(this.firstElementChild).text() === "")){
+		            	//console.log($(this.firstElementChild).text());
+		            	console.log(spaceFound);
+		            	//console.log($(this).find("#pidRow"));
+		            	if(!spaceFound && $(this).find("#pidRow").text() === "-"){
 		            		spaceFound = true;
+		            		//$(this).first().text(processBlock.pid);
 		            		console.log(" pcb table if");
 		            		console.log(processBlock.pid);
 		            		$(this).find("#pidRow").text(processBlock.pid);
@@ -50,7 +53,8 @@ function MemoryManager(){
 		            		$(this).find("#baseRow").text(processBlock.baseIndex);
 		            		$(this).find("#endRow").text(processBlock.endIndex);
 		            		$(this).find("#pcRow").text(processBlock.PC);
-		            		console.log($(this.firstElementChild).text());
+		            		//console.log($(this));
+		            		//console.log($(this.firstElementChild).text());
 		            	}
 		            });
 		        }
