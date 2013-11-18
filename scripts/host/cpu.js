@@ -33,16 +33,17 @@ function Cpu() {
         // Do the real work here. Be sure to set this.isExecuting appropriately.
         _CpuScheduler.check();
         _CpuScheduler.counter += 1;
+        
         if(this.isExecuting && this.PC < this.program.endIndex){    
             this.execute(this.fetch());
             //console.log("yes");
         }
         else{
-            _CpuScheduler.check();
+            //_CpuScheduler.check();
             //this.isExecuting = false;
             //console.log("no");
         }
-        _CpuScheduler.counter++;
+        //_CpuScheduler.counter++;
     };
 
     //program - program (string array)
