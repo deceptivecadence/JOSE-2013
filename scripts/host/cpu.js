@@ -42,7 +42,7 @@ function Cpu() {
             //this.isExecuting = false;
             //console.log("no");
         }
-        
+        _CpuScheduler.counter++;
     };
 
     //program - program (string array)
@@ -61,7 +61,10 @@ function Cpu() {
     }
 
     this.fetch = function(){
-        return _MMU.memory.memoryArray[this.PC]//offset will change within individual instruction function
+        if(this.program.offset !== 0){
+            this.PC = this.PC % this.program.offset
+        }
+        return _MMU.accessMem(this.PC,0,this.program.offset) //memory.memoryArray[this.PC]//offset will change within individual instruction function
     }
 
 
@@ -107,19 +110,36 @@ function Cpu() {
         }
         //console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
         //console.log("Last ran: "+inst + ", with PC = after: "+ (this.PC  - 256));
+        
+        console.log("****")
+        console.log(this.PC+" program: "+this.program.offset)
+        console.log(_MMU.accessMem(634,0,0))
+        console.log(_MMU.accessMem(635,0,0))
+        console.log("acc: "+this.Acc)
+        console.log(inst)
+        console.log("****")
+
+        /*for(var i = 0; i<_MMU.memory.memoryArray.length; i++){
+            var l = 512
+            if(_MMU.memory.memoryArray[i] === l.toString(16)){
+                console.log(this.PC)
+                
+                console.log("if 513: "+i)
+            }
+        }*/
     }
 
     //A9
     this.loadAcc = function(){
         //console.log(this.PC);
-        this.Acc = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        this.Acc = parseInt(_MMU.accessMem(this.PC, 1, this.program.offset),16);
         this.incrementPC(2);
     }
 
     //AD
     this.loadAccFromMemory = function (){
-        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset;//index of address 
-        var val = this.checkBoundsReference(address) + this.program.offset;
+        var address = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset;//index of address 
+        var val = this.checkBoundsReference(address) //+ this.program.offset;
         if(typeof address === "number"){
             this.Acc = val;
         }
@@ -129,7 +149,7 @@ function Cpu() {
 
     //8D
     this.storeAccInMemory = function(){
-        var indexOfAddress = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
+        var indexOfAddress = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset; //index of address
         var address = this.checkBounds(indexOfAddress);
         if(typeof address === "number"){
             _MMU.memory.memoryArray[address] = this.Acc.toString(16);
@@ -139,7 +159,7 @@ function Cpu() {
 
     //6D
     this.addFromMemoryToAcc = function(){
-        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
+        var address = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset; //index of address
         var val = this.checkBoundsReference(address);
         if(typeof val === "number"){
             this.Acc = this.Acc + val;
@@ -149,13 +169,13 @@ function Cpu() {
 
     //A2
     this.loadxReg = function(){
-        this.Xreg = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        this.Xreg = parseInt(_MMU.accessMem(this.PC, 1, this.program.offset),16);
         this.incrementPC(2);
     }
 
     //AE
     this.loadxRegFromMemory = function(){
-        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
+        var address = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset; //index of address
         var val = this.checkBoundsReference(address);
         if(typeof val === "number"){
             this.Xreg = val;
@@ -165,13 +185,13 @@ function Cpu() {
 
     //A0
     this.loadyReg = function(){
-        this.Yreg = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        this.Yreg = parseInt(_MMU.accessMem(this.PC, 1, this.program.offset),16);
         this.incrementPC(2);
     }
 
     //AC
     this.loadyRegFromMemory = function(){
-        var indexOfAddress = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
+        var indexOfAddress = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset; //index of address
         var val = this.checkBoundsReference(indexOfAddress);
         if(typeof val === "number"){
             this.Yreg = val;
@@ -197,7 +217,7 @@ function Cpu() {
 
     //EC
     this.compareByteMemToX = function(){
-        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
+        var address = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset; //index of address
         var value = this.checkBoundsReference(address);
         if(typeof value === "number"){
             //console.log("*******"+address+"*********"+this.Xreg+" "+value+"*********")
@@ -214,7 +234,7 @@ function Cpu() {
     this.branchIfZero = function(){
         if(this.Zflag == 0){
             //console.log(this.PC)
-            var additionalBranchBytes = parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+            var additionalBranchBytes = parseInt(_MMU.accessMem(this.PC, 1, this.program.offset),16);
             //console.log(additionalBranchBytes)
             this.incrementPC(2);
             //console.log(this.PC)
@@ -229,7 +249,7 @@ function Cpu() {
 
     //EE
     this.incrementByByte = function(){
-        var address = parseInt(_MMU.memory.memoryArray[this.PC + 2] + _MMU.memory.memoryArray[this.PC + 1],16) + this.program.offset; //index of address
+        var address = parseInt(_MMU.accessMem(this.PC, 2, this.program.offset) + _MMU.accessMem(this.PC, 1, this.program.offset),16) + this.program.offset; //index of address
         var value = this.checkBoundsReference(address);
         if(typeof value === "number"){
             var newVal = parseInt(value,16) + 1;
@@ -240,7 +260,7 @@ function Cpu() {
 
     //FF
     this.systemCall = function(){
-        //var param =  parseInt(_MMU.memory.memoryArray[this.PC + 1],16);
+        //var param =  parseInt(_MMU.accessMem(this.PC, 1, this.program.offset),16);
         var address = this.Yreg + this.program.offset
         if(this.Xreg === 1){
             _StdIn.putText('' + this.Yreg);
@@ -266,9 +286,10 @@ function Cpu() {
     }
 
     this.checkBoundsReference = function(index){
-
-        if (index >= this.program.baseIndex && index <= this.program.endIndex){
-            return parseInt(_MMU.memory.memoryArray[index],16);
+        var base  = this.program.baseIndex// + this.program.offset;
+        var end   = this.program.endIndex// + this.program.offset;
+        if (index >= base && index <= end){
+            return parseInt(_MMU.accessMem(index,0,0),16);
         }else{
             /*console.log(index);
             console.log(this.program.baseIndex);
@@ -282,7 +303,9 @@ function Cpu() {
     }
 
     this.checkBounds = function(index){
-        if (index >= this.program.baseIndex && index <= this.program.endIndex){
+        var base  = this.program.baseIndex// + this.program.offset;
+        var end   = this.program.endIndex// + this.program.offset;
+        if (index >= base && index <= end){
             return index;
         }
         else{

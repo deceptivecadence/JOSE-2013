@@ -40,7 +40,7 @@ function hostInit()
    if (typeof Glados === "function") {
       _GLaDOS = new Glados();
       _GLaDOS.init();
-   };
+   }
 
 }
 

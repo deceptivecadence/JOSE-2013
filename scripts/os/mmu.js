@@ -62,4 +62,8 @@ function MemoryManager(){
 	    }
 	}
 
+
+	this.accessMem = function(location, advancement, offset){
+		return this.memory.memoryArray[location + advancement + offset]
+	}
 }

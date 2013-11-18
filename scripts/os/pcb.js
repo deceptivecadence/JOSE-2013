@@ -12,7 +12,7 @@ function ProcessControlBlock(){
 		this.baseIndex      = _MMU.baseIndex;	 //memory base addrress
 		this.endIndex       = _MMU.baseIndex + this.limit - 1;
 		this.pid            = _MMU.programArray.length;	 //Process id
-		this.PC             = _MMU.baseIndex;     // Program Counter
+		this.PC             = 0;     // Program Counter
 	    this.Acc   			= 0;     // Accumulator
 	    this.Xreg  			= 0;     // X register
 	    this.Yreg  			= 0;     // Y register
