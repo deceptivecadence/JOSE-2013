@@ -31,8 +31,8 @@ function Cpu() {
         krnTrace("CPU cycle");
         // TODO: Accumulate CPU usage and profiling statistics here.
         // Do the real work here. Be sure to set this.isExecuting appropriately.
-        
         _CpuScheduler.check();
+        _CpuScheduler.counter += 1;
         if(this.isExecuting && this.PC < this.program.endIndex){    
             this.execute(this.fetch());
             //console.log("yes");
