@@ -28,56 +28,56 @@ function shellInit() {
     // ver
     sc = new ShellCommand();
     sc.command = "ver";
-    sc.description = "- Displays the current version data.";
+    sc.description = "- Displays the current version data";
     sc.function = shellVer;
     this.commandList[this.commandList.length] = sc;
     
     // help
     sc = new ShellCommand();
     sc.command = "help";
-    sc.description = "- This is the help command. Seek help.";
+    sc.description = "- This is the help command. Seek help";
     sc.function = shellHelp;
     this.commandList[this.commandList.length] = sc;
     
     // shutdown
     sc = new ShellCommand();
     sc.command = "shutdown";
-    sc.description = "- Shuts down the virtual OS but leaves the underlying hardware simulation running.";
+    sc.description = "- Turns off the OS, leaves the hardware sim running";
     sc.function = shellShutdown;
     this.commandList[this.commandList.length] = sc;
 
     // cls
     sc = new ShellCommand();
     sc.command = "cls";
-    sc.description = "- Clears the screen and resets the cursor position.";
+    sc.description = "- Clears the screen and resets the cursor position";
     sc.function = shellCls;
     this.commandList[this.commandList.length] = sc;
 
     // man <topic>
     sc = new ShellCommand();
     sc.command = "man";
-    sc.description = "<topic> - Displays the MANual page for <topic>.";
+    sc.description = "<topic>- Displays the MANual page for <topic>";
     sc.function = shellMan;
     this.commandList[this.commandList.length] = sc;
     
     // trace <on | off>
     sc = new ShellCommand();
     sc.command = "trace";
-    sc.description = "<on | off> - Turns the OS trace on or off.";
+    sc.description = "<on | off> - Turns the OS trace on or off";
     sc.function = shellTrace;
     this.commandList[this.commandList.length] = sc;
 
     // rot13 <string>
     sc = new ShellCommand();
     sc.command = "rot13";
-    sc.description = "<string> - Does rot13 obfuscation on <string>.";
+    sc.description = "<string>- Does rot13 obfuscation on <string>";
     sc.function = shellRot13;
     this.commandList[this.commandList.length] = sc;
 
     // prompt <string>
     sc = new ShellCommand();
     sc.command = "prompt";
-    sc.description = "<string> - Sets the prompt.";
+    sc.description = "<string>- Sets the prompt";
     sc.function = shellPrompt;
     this.commandList[this.commandList.length] = sc;
     
@@ -99,42 +99,42 @@ function shellInit() {
     //status
     sc = new ShellCommand();
     sc.command = "status";
-    sc.description = "<string> set display bar text"
+    sc.description = "<string>- set display bar text"
     sc.function = shellStatus;
     this.commandList[this.commandList.length] = sc;
     
     //trap
     sc = new ShellCommand();
     sc.command = "ktrap";
-    sc.description = " - creates a kernal trap"
+    sc.description = "- creates a kernal trap"
     sc.function = shellTrap;
     this.commandList[this.commandList.length] = sc;
 
     //load
     sc = new ShellCommand();
     sc.command = "load";
-    sc.description = " - loads program hex"
+    sc.description = "- loads program hex"
     sc.function = shellLoad;
     this.commandList[this.commandList.length] = sc;
 
     //advice
     sc = new ShellCommand();
     sc.command = "advice";
-    sc.description = " - need advice on life?"
+    sc.description = "- need advice on life?"
     sc.function = shellAdvice;
     this.commandList[this.commandList.length] = sc;
 
     //run
     sc = new ShellCommand();
     sc.command = "run";
-    sc.description = " - <pid> run the program specified by the pid"
+    sc.description = "<pid>- run the program specified by the pid"
     sc.function = shellRun;
     this.commandList[this.commandList.length] = sc;
 
     //kill
     sc = new ShellCommand();
     sc.command = "kill";
-    sc.description = " - <pid> kill the program specified by the pid"
+    sc.description = "<pid>- kill the program specified by the pid"
     sc.function = shellKill;
     this.commandList[this.commandList.length] = sc;
 
@@ -155,8 +155,43 @@ function shellInit() {
     //quantum
     sc = new ShellCommand();
     sc.command = "quantum";
-    sc.description = "- <int> changes the interval of Round Robin scheduling"
+    sc.description = "<int>- changes the Round Robin interval"
     sc.function = shellQuantum;
+    this.commandList[this.commandList.length] = sc;
+
+    //Create File
+    sc = new ShellCommand();
+    sc.command = "create";
+    sc.description = "<file>- creates a file (no spaces)"
+    sc.function = shellCreate;
+    this.commandList[this.commandList.length] = sc;
+
+    //Read File
+    sc = new ShellCommand();
+    sc.command = "read";
+    sc.description = "<file>- reads file"
+    sc.function = shellRead;
+    this.commandList[this.commandList.length] = sc;
+
+    //Write File
+    sc = new ShellCommand();
+    sc.command = "write";
+    sc.description = "<file> <data>- writes to file"
+    sc.function = shellWrite;
+    this.commandList[this.commandList.length] = sc;
+
+    //Delete File
+    sc = new ShellCommand();
+    sc.command = "delete";
+    sc.description = "<filename>- deletes file"
+    sc.function = shellDelete;
+    this.commandList[this.commandList.length] = sc;
+
+    //Format System
+    sc = new ShellCommand();
+    sc.command = "format";
+    sc.description = "- formats the file system"
+    sc.function = shellFormat;
     this.commandList[this.commandList.length] = sc;
 
     // processes - list the running processes and their IDs
@@ -554,4 +589,24 @@ function shellQuantum(args){
     if(typeof quantum === "number"){
         _CpuScheduler.quantum = quantum;
     }
+}
+
+function shellCreate(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],CREATE]) );
+}
+
+function shellRead(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],READ]) );
+}
+
+function shellWrite(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],WRITE],args[1]) );
+}
+
+function shellDelete(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],DELETE]) );
+}
+
+function shellFormat(){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],FORMAT]) );
 }

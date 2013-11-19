@@ -32,6 +32,14 @@ var MEMORY_LENGTH = 256;
 var MAX_DIR_TRACK_LEN = 1;
 var MAX_FILE_TRACK_LEN = 3;
 var MAX_BLOCK_LEN = 77;
+var MBR = "000";
+var FILE_FILLER = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+var FILE_DIVIDER = "|"
+var CREATE = 0;
+var READ = 1;
+var WRITE = 2;
+var DELETE = 3;
+var FORMAT = 4;
 
 //
 // Global Variables
