@@ -153,7 +153,7 @@ CanvasTextFunctions.draw = function(ctx,font,size,x,y,str)
     ctx.save();
     ctx.lineCap = "round";
     ctx.lineWidth = 2.0 * mag;
-	ctx.strokeStyle = "black";
+	ctx.strokeStyle = "white";
 
     for (var i = 0; i < len; i++) 
 	{
@@ -185,6 +185,9 @@ CanvasTextFunctions.draw = function(ctx,font,size,x,y,str)
 		}
 		ctx.stroke();
 		x += c.width*mag;
+    }
+    if(x >= 500){
+        _StdIn.advanceLine();
     }
     ctx.restore();
     return total;

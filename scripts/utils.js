@@ -44,5 +44,6 @@ function updateTime(){
 	date = date.toString();
 	date = date.slice(0,date.length-24);
 	timeContext.font = "15px Arial"
+    timeContext.fillStyle = "#FFFFFF";
 	timeContext.fillText(date,3,15);
 }

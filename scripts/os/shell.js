@@ -42,7 +42,7 @@ function shellInit() {
     // shutdown
     sc = new ShellCommand();
     sc.command = "shutdown";
-    sc.description = "- Turns off the OS, leaves the hardware sim running";
+    sc.description = "- Turns off the OS, leaves the hardware simulation running";
     sc.function = shellShutdown;
     this.commandList[this.commandList.length] = sc;
 
@@ -492,6 +492,7 @@ function shellStatus(args){
     statusContext = statusCanvas.getContext('2d');
     statusContext.clearRect(0,0,715,20);
     statusContext.font = "15px Arial"
+    statusContext.fillStyle="#FFFFFF";
     if (typeof args[0] == "undefined"){
         statusContext.fillText("",3,15);
     }else{

@@ -34,15 +34,17 @@ function createFile(params){
     if(checkFormat()){
         console.log(typeof params[0])
         var filename = params[0].substr(0,60);
-        console.log("test create")
         var dirSection = sessionStorage.getItem(MBR).substring(4,7);
         var newDirSection = stringFormatAndInc(dirSection);
         
         var currentFileSection = sessionStorage.getItem(MBR).substring(8,11);
         var newFileSection = stringFormatAndInc(currentFileSection);
 
+        //regex to replace the amount of characters that filename will take up
+        var re = new RegExp("^.{"+filename.length+"}")
+        var replacedData = sessionStorage.getItem(dirSection).substring(5).replace(re,filename);
         sessionStorage.setItem(currentFileSection,"1---"+FILE_DIVIDER+FILE_FILLER);
-        sessionStorage.setItem(dirSection,"1"+currentFileSection+FILE_DIVIDER+filename);
+        sessionStorage.setItem(dirSection,"1"+currentFileSection+FILE_DIVIDER+replacedData);
         sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(dirSection,newDirSection).replace(currentFileSection,newFileSection));
         
         
@@ -90,7 +92,30 @@ function createFile(params){
 }
 
 function readFile(params){
-    
+    var searchFor = params[0];
+    var fileFound = false;
+    var i = "001";
+    while(!fileFound){
+        if (searchFor === sessionStorage.getItem(i).split("|")[1].split("~")[0]){
+            fileFound = true;
+            var dataLocation = sessionStorage.getItem(i).split("|")[0].substr(1);
+            var data = sessionStorage.getItem(dataLocation);
+            var linkEnds = false;
+            var dataArr = [];
+            while(!linkEnds){
+                var link = data.substring(1,4);
+                if(isNaN(link)){
+                    dataArr.push(data.split("|")[1].split("~")[0]);
+                    _StdIn.putText(dataArr.join(""));
+                    linkEnds = true;
+                }
+                else{
+                    dataArr.push(data.split("|")[1].split("~")[0]);
+                    data = sessionStorage.getItem(link);
+                }
+            }
+        }
+    }
 }
 
 function writeFile(params){
