@@ -534,7 +534,7 @@ function shellAdvice(args){
 
 function shellRun(args){
     var pidArg = parseInt(args[0]);
-    if (typeof pidArg === 'number'){
+    if (!isNaN(pidArg)){
         var pidFound = false;
         for (var i=0; i<_MMU.programArray.length; i++){
             var program = _MMU.programArray[i];

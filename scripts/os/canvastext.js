@@ -185,9 +185,12 @@ CanvasTextFunctions.draw = function(ctx,font,size,x,y,str)
 		}
 		ctx.stroke();
 		x += c.width*mag;
-    }
-    if(x >= 500){
-        _StdIn.advanceLine();
+        
+        if(x >= 530){
+            _StdIn.advanceLine()
+            x = -5;
+            y += _DefaultFontSize + _FontHeightMargin;
+        }
     }
     ctx.restore();
     return total;
