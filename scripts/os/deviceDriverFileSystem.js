@@ -141,12 +141,20 @@ function writeFile(params){
             while(sections>0){
                 var data = dataSections.shift()
                 var re = new RegExp("^.{"+data.length+"}")
+                sessionStorage.setItem(dataLocation,"1---"+FILE_DIVIDER+FILE_FILLER);
                 var replacedData = sessionStorage.getItem(dataLocation).substring(5).replace(re,data);
                 if(sections === 1){
                     sessionStorage.setItem(dataLocation,"1---"+FILE_DIVIDER+replacedData);
                 }
                 else{
-                    nextDataSection = sessionStorage.getItem(MBR).substring(8,11);
+                    var linkExists = sessionStorage.getItem(dataLocation).substring(1,4);
+                    console.log(linkExists)
+                    if(isNaN(linkExists)){
+                        nextDataSection = sessionStorage.getItem(MBR).substring(8,11);
+                    }
+                    else{
+                        nextDataSection = linkExists
+                    }
                     newDataSection = stringFormatAndInc(nextDataSection);
                     sessionStorage.setItem(dataLocation,"1"+nextDataSection+FILE_DIVIDER+replacedData);
                     sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(nextDataSection,newDataSection));

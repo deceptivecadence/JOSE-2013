@@ -609,5 +609,5 @@ function shellDelete(args){
 }
 
 function shellFormat(){
-    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],FORMAT]) );
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["none",FORMAT]) );
 }
