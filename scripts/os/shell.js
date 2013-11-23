@@ -601,7 +601,7 @@ function shellRead(args){
 }
 
 function shellWrite(args){
-    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],WRITE],args[1]) );
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args.shift(),WRITE,args.join(" ")]) );
 }
 
 function shellDelete(args){

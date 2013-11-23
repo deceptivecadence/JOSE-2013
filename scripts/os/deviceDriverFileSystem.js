@@ -90,7 +90,7 @@ function createFile(params){
         }*/
     }
 }
-
+//expect to receive params as follows[filename,operation]
 function readFile(params){
     var searchFor = params[0];
     var fileFound = false;
@@ -115,11 +115,52 @@ function readFile(params){
                 }
             }
         }
+        i = stringFormatAndInc(i);
+        if (i === "078"){
+            fileFound = true
+            _StdIn.putText("File not found");
+        }
     }
 }
 
+//expect to receive params as follows[filename,operation,data]
 function writeFile(params){
-    
+    var filename = params[0];
+    var data = params[2];
+    var fileFound = false;
+
+    var sections = Math.ceil(data.length/60);
+    var dataSections = data.match(/.{1,60}/g) || [];
+
+    var i = "001";
+    while(!fileFound){
+        if (filename === sessionStorage.getItem(i).split(FILE_DIVIDER)[1].split(FILE_FILLER.substr(0,1))[0]){
+            fileFound = true;
+            var dataLocation = sessionStorage.getItem(i).split(FILE_DIVIDER)[0].substr(1);
+            var linkEnds = false;
+            while(sections>0){
+                var data = dataSections.shift()
+                var re = new RegExp("^.{"+data.length+"}")
+                var replacedData = sessionStorage.getItem(dataLocation).substring(5).replace(re,data);
+                if(sections === 1){
+                    sessionStorage.setItem(dataLocation,"1---"+FILE_DIVIDER+replacedData);
+                }
+                else{
+                    nextDataSection = sessionStorage.getItem(MBR).substring(8,11);
+                    newDataSection = stringFormatAndInc(nextDataSection);
+                    sessionStorage.setItem(dataLocation,"1"+nextDataSection+FILE_DIVIDER+replacedData);
+                    sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(nextDataSection,newDataSection));
+                    dataLocation = nextDataSection;
+                }
+                sections--;
+            }
+        }
+        i = stringFormatAndInc(i);
+        if (i === "078"){
+            fileFound = true
+            _StdIn.putText("File not found");
+        }
+    }
 }
 
 function deleteFile(params){
