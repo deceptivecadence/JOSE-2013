@@ -27,6 +27,9 @@ function DeviceDriverFileSystem(){                     // Add or override specif
             case 4: format(); break;
         }
     };
+    this.test = function(){
+        updateMBR();
+    }
 }
 
 //expect to receive params as follows[filename]
@@ -50,17 +53,18 @@ function createFile(params){
         }
         if(!fileFound){
             var dirSection = sessionStorage.getItem(MBR).substring(4,7);
-            var newDirSection = stringFormatAndInc(dirSection);
+            //var newDirSection = stringFormatAndInc(dirSection);
             
             var currentFileSection = sessionStorage.getItem(MBR).substring(8,11);
-            var newFileSection = stringFormatAndInc(currentFileSection);
+            //var newFileSection = stringFormatAndInc(currentFileSection);
 
             //regex to replace the amount of characters that filename will take up
             var re = new RegExp("^.{"+filename.length+"}")
             var replacedData = sessionStorage.getItem(dirSection).substring(5).replace(re,filename);
             sessionStorage.setItem(currentFileSection,"1---"+FILE_DIVIDER+FILE_FILLER);
             sessionStorage.setItem(dirSection,"1"+currentFileSection+FILE_DIVIDER+replacedData);
-            sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(dirSection,newDirSection).replace(currentFileSection,newFileSection));
+            updateMBR();
+            //sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(dirSection,newDirSection).replace(currentFileSection,newFileSection));
             
             
             _StdIn.putText("File Created!");
@@ -149,11 +153,11 @@ function readFile(params){
 }
 
 //expect to receive params as follows[filename,operation,data]
+//TODO: FIX LINK EXISTS
 function writeFile(params){
     var filename = params[0];
     var data = params[2];
     var fileFound = false;
-
     var sections = Math.ceil(data.length/60);
     var dataSections = data.match(/.{1,60}/g) || [];
 
@@ -187,17 +191,49 @@ function writeFile(params){
                 }
                 sections--;
             }
+            _StdIn.putText("Write succeeded");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
+        }
+        i = stringFormatAndInc(i);
+        if (i === "078"){
+            _StdIn.putText("File not found");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
+            break;
+        }
+    }
+}
+
+
+//expect to receive params as follows[filename,operation,data]
+function deleteFile(params){
+    var filename = params[0];
+    var fileFound = false;
+    var i = "001";
+    while(!fileFound){
+        if (filename === sessionStorage.getItem(i).split(FILE_DIVIDER)[1].split(FILE_FILLER.substr(0,1))[0]){
+            fileFound = true;
+            var dataLocation = sessionStorage.getItem(i).split(FILE_DIVIDER)[0].substring(1,4);
+
+            sessionStorage.setItem(i,"0---"+FILE_DIVIDER+FILE_FILLER);
+            sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(sessionStorage.getItem(MBR).substring(4,7),i));
+
+            sessionStorage.setItem(dataLocation,"0---"+FILE_DIVIDER+FILE_FILLER);
+            sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(sessionStorage.getItem(MBR).substring(8,11),dataLocation));
+            _StdIn.putText("File deleted!");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
         }
         i = stringFormatAndInc(i);
         if (i === "078"){
             fileFound = true
             _StdIn.putText("File not found");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
         }
     }
-}
-
-function deleteFile(params){
-    
+    updateMBR();
 }
 
 function format(){
@@ -245,26 +281,51 @@ function checkFormat(){
     }
 }
 
-function findFileSpace(){
-    for (var i=0; i<MAX_FILE_TRACK_LEN; i++) {
-            var track = i+1
-            for (var j=1; j<=MAX_BLOCK_LEN && !spaceFound; j++) {
-                if(j<=9){
-                    if(sessionStorage[i+"0"+j].substring(0,1)==="0"){
-                        return [i+"0"+j,sessionStorage[i+""+j]]
-                    }
+function findFreeSpace(){
+    var spaceFound = false;
+    var dirSpace = "";
+    var fileSpace = "";
+    for (var i=1; i<=MAX_FILE_TRACK_LEN && !spaceFound; i++) {
+        for (var j=0; j<=MAX_BLOCK_LEN && !spaceFound; j++) {
+            if(j<=9){
+                if(sessionStorage[i+"0"+j].substring(0,1)==="0"){
+                    fileSpace = i+"0"+j;
+                    spaceFound = true;
                 }
-                else{
-                    if(sessionStorage[i+""+j].substring(0,1)==="0"){
-                        return [i+""+j,sessionStorage[i+""+j]]
-                    }
+            }
+            else{
+                if(sessionStorage[i+""+j].substring(0,1)==="0"){
+                    fileSpace = i+""+j;
+                    spaceFound = true;
                 }
             }
         }
+    }
+    spaceFound = false;
+    for (var i=0; i<MAX_DIR_TRACK_LEN && !spaceFound; i++) {
+        for (var j=1; j<=MAX_BLOCK_LEN && !spaceFound; j++) {
+            if(j<=9){
+                if(sessionStorage[i+"0"+j].substring(0,1)==="0"){
+                    dirSpace = i+"0"+j;
+                    spaceFound = true;
+                }
+            }
+            else{
+                if(sessionStorage[i+""+j].substring(0,1)==="0"){
+                    dirSpace = i+""+j;
+                    spaceFound = true;
+                }
+            }
+        }
+    }
+
+    return [dirSpace,fileSpace];
 }
 
-function findDirSpace(){
-
+function updateMBR(){
+    var oldMBR = [sessionStorage.getItem(MBR).substring(4,7),sessionStorage.getItem(MBR).substring(8,11)]
+    var newMBR = findFreeSpace();
+    sessionStorage.setItem(MBR, sessionStorage.getItem(MBR).replace(oldMBR[0],newMBR[0]).replace(oldMBR[1],newMBR[1]));
 }
 
 function stringFormatAndInc(integer){
