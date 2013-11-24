@@ -29,28 +29,49 @@ function DeviceDriverFileSystem(){                     // Add or override specif
     };
 }
 
-//expect to receive params as follows[filename,data]
+//expect to receive params as follows[filename]
 function createFile(params){
     if(checkFormat()){
-        console.log(typeof params[0])
         var filename = params[0].substr(0,60);
-        var dirSection = sessionStorage.getItem(MBR).substring(4,7);
-        var newDirSection = stringFormatAndInc(dirSection);
-        
-        var currentFileSection = sessionStorage.getItem(MBR).substring(8,11);
-        var newFileSection = stringFormatAndInc(currentFileSection);
+        var fileFound =  false;
+        var reachedEnd = false;
+        var i = "001";
+        while(!reachedEnd){
+            if(sessionStorage.getItem(i)[0] === "1"){
+                if (filename === sessionStorage.getItem(i).split("|")[1].split("~")[0]){
+                    fileFound = true;
+                    reachedEnd = true;
+                }
+                i = stringFormatAndInc(i);
+            }
+            else{
+                reachedEnd = true;
+            }
+        }
+        if(!fileFound){
+            var dirSection = sessionStorage.getItem(MBR).substring(4,7);
+            var newDirSection = stringFormatAndInc(dirSection);
+            
+            var currentFileSection = sessionStorage.getItem(MBR).substring(8,11);
+            var newFileSection = stringFormatAndInc(currentFileSection);
 
-        //regex to replace the amount of characters that filename will take up
-        var re = new RegExp("^.{"+filename.length+"}")
-        var replacedData = sessionStorage.getItem(dirSection).substring(5).replace(re,filename);
-        sessionStorage.setItem(currentFileSection,"1---"+FILE_DIVIDER+FILE_FILLER);
-        sessionStorage.setItem(dirSection,"1"+currentFileSection+FILE_DIVIDER+replacedData);
-        sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(dirSection,newDirSection).replace(currentFileSection,newFileSection));
-        
-        
-        _StdIn.putText("File Created!");
-        _StdIn.advanceLine();
-        _OsShell.putPrompt();
+            //regex to replace the amount of characters that filename will take up
+            var re = new RegExp("^.{"+filename.length+"}")
+            var replacedData = sessionStorage.getItem(dirSection).substring(5).replace(re,filename);
+            sessionStorage.setItem(currentFileSection,"1---"+FILE_DIVIDER+FILE_FILLER);
+            sessionStorage.setItem(dirSection,"1"+currentFileSection+FILE_DIVIDER+replacedData);
+            sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(dirSection,newDirSection).replace(currentFileSection,newFileSection));
+            
+            
+            _StdIn.putText("File Created!");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
+        }
+        else{
+            _StdIn.putText("File Has Already Been Created!");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
+        }
         /*
         var data = params[1];
         var sections = Math.ceil(data.length/60);
@@ -107,6 +128,8 @@ function readFile(params){
                 if(isNaN(link)){
                     dataArr.push(data.split("|")[1].split("~")[0]);
                     _StdIn.putText(dataArr.join(""));
+                    _StdIn.advanceLine();
+                    _OsShell.putPrompt();
                     linkEnds = true;
                 }
                 else{
@@ -119,6 +142,8 @@ function readFile(params){
         if (i === "078"){
             fileFound = true
             _StdIn.putText("File not found");
+            _StdIn.advanceLine();
+            _OsShell.putPrompt();
         }
     }
 }

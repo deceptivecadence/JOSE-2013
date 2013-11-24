@@ -12,8 +12,8 @@
 // Global CONSTANTS
 //
 var APP_NAME = "JOSE";
-var APP_VERSION = "0.01";
-var REVISION_DATE = "Sept 9th, 2013"
+var APP_VERSION = "8.UR55";
+var REVISION_DATE = "Dec 5th, 2013"
 var IMAGE = "url(http://24.media.tumblr.com/tumblr_m4po0153Ly1r3rwuuo1_400.gif)";
 var CPU_CLOCK_INTERVAL = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
