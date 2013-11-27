@@ -26,6 +26,7 @@ function DeviceDriverFileSystem(){                     // Add or override specif
             case 3: deleteFile(params); break;
             case 4: format(); break;
             case 5: listFiles(); break;
+            case 6: findProgramFiles(); break;
         }
     };
     this.test = function(){
@@ -121,13 +122,13 @@ function readFile(params){
     var searchFor = params[0];
     var fileFound = false;
     var i = "001";
+    var dataArr = [];
     while(!fileFound){
         if (searchFor === sessionStorage.getItem(i).split("|")[1].split("~")[0]){
             fileFound = true;
             var dataLocation = sessionStorage.getItem(i).split("|")[0].substr(1);
             var data = sessionStorage.getItem(dataLocation);
             var linkEnds = false;
-            var dataArr = [];
             while(!linkEnds){
                 var link = data.substring(1,4);
                 if(isNaN(link)){
@@ -151,6 +152,7 @@ function readFile(params){
             _OsShell.putPrompt();
         }
     }
+    return dataArr;
 }
 
 //expect to receive params as follows[filename,operation,data]
@@ -334,6 +336,20 @@ function listFiles(){
     _StdIn.advanceLine();
     _OsShell.putPrompt();
 }
+
+
+function findProgramFiles(){
+    var i = "001";
+    var fileArray = [];
+    while (i !== "078"){
+        if(typeof sessionStorage.getItem(i).split("|")[1].split("~")[0].split("program")[1] !== "undefined"){
+            fileArray.push(sessionStorage.getItem(i).split("|")[1].split("~")[0].split("program")[1]);
+        }
+        i = stringFormatAndInc(i);
+    }
+    _MMU.pidOnFile = fileArray;
+}
+
 
 function updateMBR(){
     var oldMBR = [sessionStorage.getItem(MBR).substring(4,7),sessionStorage.getItem(MBR).substring(8,11)]

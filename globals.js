@@ -41,6 +41,7 @@ var WRITE = 2;
 var DELETE = 3;
 var FORMAT = 4;
 var LIST = 5;
+var PID_ON_FILE = 6;
 
 //
 // Global Variables

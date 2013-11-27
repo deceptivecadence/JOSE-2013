@@ -28,8 +28,11 @@ function CpuScheduler(){
             _ReadyQueue.enqueue(_CPU.program);
         }
         if(_ReadyQueue.getSize()>0){
+            _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["",PID_ON_FILE]) );
             var program = _ReadyQueue.dequeue();
-            if(program.pid in )
+            if(program.pid in _MMU.pidOnFile){
+                var pOnFile = _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+program.pid, READ]) );
+            }
             hostLog("Switched to program with pid: "+program.pid);
             _CPU.loadProgram(program);
             _CPU.isExecuting = true;
