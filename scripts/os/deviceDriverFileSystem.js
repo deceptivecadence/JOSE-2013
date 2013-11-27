@@ -18,7 +18,7 @@ function DeviceDriverFileSystem(){                     // Add or override specif
         // More?
     };
     this.isr = function(params){
-        //expect to receive params as follows[filename,operation,data]
+        //expect to receive params as follows[filename,operation,data,from user | os]
         switch(params[1]){
             case 0: createFile(params); break;
             case 1: readFile(params); break;
@@ -117,7 +117,7 @@ function createFile(params){
         }*/
     }
 }
-//expect to receive params as follows[filename,operation]
+//expect to receive params as follows[filename,operation,"",from user | os]
 function readFile(params){
     var searchFor = params[0];
     var fileFound = false;
@@ -133,15 +133,21 @@ function readFile(params){
                 var link = data.substring(1,4);
                 if(isNaN(link)){
                     dataArr.push(data.split("|")[1].split("~")[0]);
-                    _StdIn.putText(dataArr.join(""));
-                    _StdIn.advanceLine();
-                    _OsShell.putPrompt();
                     linkEnds = true;
                 }
                 else{
                     dataArr.push(data.split("|")[1].split("~")[0]);
                     data = sessionStorage.getItem(link);
                 }
+            }
+
+            if(params[3]){ //if FROM_OS == 1
+                _TempFileSwapQueue.push(dataArr)
+            }
+            else{ // then from user
+                _StdIn.putText(dataArr.join(""));
+                _StdIn.advanceLine();
+                _OsShell.putPrompt();
             }
         }
         i = stringFormatAndInc(i);
@@ -152,10 +158,9 @@ function readFile(params){
             _OsShell.putPrompt();
         }
     }
-    return dataArr;
 }
 
-//expect to receive params as follows[filename,operation,data]
+//expect to receive params as follows[filename,operation,data,from user | os]
 //TODO: FIX LINK EXISTS
 function writeFile(params){
     var filename = params[0];
@@ -194,9 +199,14 @@ function writeFile(params){
                 }
                 sections--;
             }
-            _StdIn.putText("Write succeeded");
-            _StdIn.advanceLine();
-            _OsShell.putPrompt();
+            if(params[3]){ //if FROM_OS == 1
+                //no output necessary
+            }
+            else{ // then from user
+                _StdIn.putText("Write succeeded");
+                _StdIn.advanceLine();
+                _OsShell.putPrompt();
+            }
         }
         i = stringFormatAndInc(i);
         if (i === "078"){

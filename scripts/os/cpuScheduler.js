@@ -28,13 +28,18 @@ function CpuScheduler(){
             _ReadyQueue.enqueue(_CPU.program);
         }
         if(_ReadyQueue.getSize()>0){
-            _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["",PID_ON_FILE]) );
-            var program = _ReadyQueue.dequeue();
-            if(program.pid in _MMU.pidOnFile){
-                var pOnFile = _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+program.pid, READ]) );
+            var newProgram = _ReadyQueue.dequeue();
+            if(newProgram.pid in _MMU.pidOnFile){
+                //program is read from disk
+               _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+newProgram.pid, READ, "", FROM_OS]) );
+               var pOnDisk = _TempFileSwapQueue.dequeue();
+               pOnDisk = pOnDisk.split(" ");
+               //program from memory is written to disk
+               var pInMem = _MMU.memory.memoryArray.slice(_CPU.program.baseIndex);
+               _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+_CPU.program.pid, WRITE, pInMem, FROM_OS]) );
             }
-            hostLog("Switched to program with pid: "+program.pid);
-            _CPU.loadProgram(program);
+            hostLog("Switched to program with pid: "+newProgram.pid);
+            _CPU.loadProgram(newProgram);
             _CPU.isExecuting = true;
         }
     }

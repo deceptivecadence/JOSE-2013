@@ -93,6 +93,7 @@ function hostBtnStartOS_click(btn)
     _ReadyQueue = new Queue();
     _CpuScheduler = new CpuScheduler();
     _CpuScheduler.init();
+    _TempFileSwapQueue = new Queue();
 
 
     // ... then set the host clock pulse ...

@@ -617,11 +617,11 @@ function shellCreate(args){
 }
 
 function shellRead(args){
-    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],READ]) );
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],READ,"",FROM_USER]) );
 }
 
 function shellWrite(args){
-    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args.shift(),WRITE,args.join(" ")]) );
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args.shift(),WRITE,args.join(" "),FROM_USER]) );
 }
 
 function shellDelete(args){

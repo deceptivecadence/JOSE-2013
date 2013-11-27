@@ -112,13 +112,13 @@ function Cpu() {
         //console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
         //console.log("Last ran: "+inst + ", with PC = after: "+ (this.PC  - 256));
         
-        console.log("****")
+        /*console.log("****")
         console.log(this.PC+" program: "+this.program.offset)
         console.log(_MMU.accessMem(634,0,0))
         console.log(_MMU.accessMem(635,0,0))
         console.log("acc: "+this.Acc)
         console.log(inst)
-        console.log("****")
+        console.log("****")*/
 
         /*for(var i = 0; i<_MMU.memory.memoryArray.length; i++){
             var l = 512

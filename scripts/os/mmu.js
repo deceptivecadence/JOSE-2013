@@ -69,6 +69,7 @@ function MemoryManager(){
 
 			this.offset = this.programArray.length * MEMORY_LENGTH;
 			bufferedProgram = program.concat(buffer);
+        	this.offset = 512;
         	this.baseIndex = 512; // will replace last program in array
 
             this.endIndex = 767; // will replace alst program in array
