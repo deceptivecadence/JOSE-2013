@@ -10,8 +10,9 @@ function MemoryManager(){
 		this.memory.init();
 		this.programArray = [];
 		this.residentList = [];
-		this.partIsAvailable=[0,0,0];
 		this.offset = 0;
+		this.programsLoaded = 0;
+		this.pidOnFile = [];
 	}
 
 	this.load = function(program){
@@ -20,11 +21,10 @@ function MemoryManager(){
 	        	if(program.length <= MEMORY_LENGTH){
 	        		//console.log("in mmu loaded");
 					buffer = [];
-					
 					for (var i = 0; i < MEMORY_LENGTH - program.length; i++){
 						buffer.push("00");
 					}
-					this.partIsAvailable[this.programArray.length] = 1;
+
 					this.offset = this.programArray.length * MEMORY_LENGTH;
 					bufferedProgram = program.concat(buffer);
 		        	this.baseIndex = this.memory.memoryArray.length;
@@ -34,6 +34,7 @@ function MemoryManager(){
 		            //console.log(processBlock);
 		            processBlock.init();
 		            this.programArray.push(processBlock);
+		            this.programsLoaded++
 		            //console.log(processBlock);
 
 		            var table = $("#tablePcb tbody").children()
@@ -59,6 +60,26 @@ function MemoryManager(){
 		            });
 		        }
 	      	}
+	    }
+	    else{
+	    	buffer = [];
+			for (var i = 0; i < MEMORY_LENGTH - program.length; i++){
+				buffer.push("00");
+			}
+
+			this.offset = this.programArray.length * MEMORY_LENGTH;
+			bufferedProgram = program.concat(buffer);
+        	this.baseIndex = 512; // will replace last program in array
+
+            this.endIndex = 767; // will replace alst program in array
+            processBlock = new ProcessControlBlock();
+            //console.log(processBlock);
+            processBlock.init();
+            this.programArray.push(processBlock);
+	    	_KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+this.programsLoaded,CREATE]) );
+			_KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+this.programsLoaded,WRITE,program.join(" ")]) );
+			this.programsLoaded++
+
 	    }
 	}
 

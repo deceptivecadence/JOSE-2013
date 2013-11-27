@@ -3,6 +3,7 @@ function CpuScheduler(){
     this.init = function(){
         this.quantum = 6;
         this.counter = 1;
+        this.schedule = "rr";
     }
 
     this.check = function(){
@@ -28,9 +29,23 @@ function CpuScheduler(){
         }
         if(_ReadyQueue.getSize()>0){
             var program = _ReadyQueue.dequeue();
+            if(program.pid in )
             hostLog("Switched to program with pid: "+program.pid);
             _CPU.loadProgram(program);
             _CPU.isExecuting = true;
         }
+    }
+
+    this.changedSchedule = function (newSched){
+        switch(newSched){
+            case "rr": this.schedule = "rr"; this.quantum = 6;
+                break;
+            case "fcfs": this.schedule = "fcfs"; this.quantum = 1123581321345589144;
+                break;
+            case "priority": this.schedule = "priority";
+                break;
+            default: return false;
+        }
+        return true;
     }
 }

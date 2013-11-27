@@ -25,6 +25,7 @@ function DeviceDriverFileSystem(){                     // Add or override specif
             case 2: writeFile(params); break;
             case 3: deleteFile(params); break;
             case 4: format(); break;
+            case 5: listFiles(); break;
         }
     };
     this.test = function(){
@@ -320,6 +321,18 @@ function findFreeSpace(){
     }
 
     return [dirSpace,fileSpace];
+}
+
+function listFiles(){
+    var i = "001";
+    var fileArray = [];
+    while (sessionStorage.getItem(i).split("|")[1].split("~")[0] !== ""){
+        fileArray.push(sessionStorage.getItem(i).split("|")[1].split("~")[0]);
+        i = stringFormatAndInc(i);
+    }
+    _StdIn.putText("Files: "+fileArray.join(", "));
+    _StdIn.advanceLine();
+    _OsShell.putPrompt();
 }
 
 function updateMBR(){

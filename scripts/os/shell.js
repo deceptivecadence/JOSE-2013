@@ -194,6 +194,26 @@ function shellInit() {
     sc.function = shellFormat;
     this.commandList[this.commandList.length] = sc;
 
+    //ls - list files
+    sc = new ShellCommand();
+    sc.command = "ls";
+    sc.description = "- list files in disk"
+    sc.function = shellList;
+    this.commandList[this.commandList.length] = sc;
+
+    //setschedule
+    sc = new ShellCommand();
+    sc.command = "setschedule";
+    sc.description = "<rr | fcfs | priority> sets scheduling algorithm"
+    sc.function = shellSetSched;
+    this.commandList[this.commandList.length] = sc;
+
+    //getschedule
+    sc = new ShellCommand();
+    sc.command = "getschedule";
+    sc.description = "current scheduling algorithm running"
+    sc.function = shellGetSched;
+    this.commandList[this.commandList.length] = sc;
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -610,4 +630,21 @@ function shellDelete(args){
 
 function shellFormat(){
     _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["none",FORMAT]) );
+}
+
+function shellList(){
+     _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["none",LIST]) );
+}
+
+function shellSetSched(args){
+    if(_CpuScheduler.changedSchedule(args[0])){
+        _StdIn.putText("Schedule changed to: "+_CpuScheduler.schedule);
+    }
+    else{
+        _StdIn.putText("Not a correct scheduling algorithm")
+    }
+}
+
+function shellGetSched(){
+    _StdIn.putText(_CpuScheduler.schedule);
 }

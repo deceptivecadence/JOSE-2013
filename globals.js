@@ -40,6 +40,7 @@ var READ = 1;
 var WRITE = 2;
 var DELETE = 3;
 var FORMAT = 4;
+var LIST = 5;
 
 //
 // Global Variables
