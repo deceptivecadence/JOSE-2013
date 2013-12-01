@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-   <meta name="author"             content="Alan G. Labouseur" />
+   <meta name="author"             content="Mike Mucci" />
    <link rel="stylesheet" href="jose.css" type="text/css" media="screen" />
    <link rel="shortcut icon" href="favicon.png" />
 
@@ -12,8 +12,9 @@
    </title>
    
    <!--Adds jQuery-->
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script src="https://raw.github.com/caleb531/jcanvas/master/jcanvas.js"></script>
+   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+   <script src="//raw.github.com/caleb531/jcanvas/master/jcanvas.js"></script>
    
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
    <script type="text/javascript" src="globals.js"></script>	
@@ -43,6 +44,13 @@
    <script type="text/javascript" src="scripts/utils.js"></script>
    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 
+   <script type="text/javascript">
+        $(document).ready(function(){
+            $("#fileDialog").dialog({
+                autoOpen: false
+            })
+        });
+   </script>
    </head>
 
 <body onload="hostInit();">
@@ -83,6 +91,14 @@
              value="Step"
              tabindex="3"
              onclick="hostBtnStep_click(this);">
+
+    <input type="button"
+         id = "btnFile"
+         name="brnFile"
+         class="normal_button"
+         value="View File System"
+         tabindex="4"
+         onclick="hostBtnFile_click(this);">
    </div>
    
    <div id="divStatusTotal">
@@ -228,6 +244,9 @@
       </label>
    </div>
 
+    <div id="fileDialog" title="File System">
+
+    </div>
 </div>
 
 <p class="footerText" style="clear:both;">

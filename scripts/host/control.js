@@ -128,3 +128,9 @@ function hostBtnStep_click(btn)
     _CPU.step = true;
     _CPU.isExecuting = !_CPU.isExecuting;
 }
+
+function hostBtnFile_click(btn){
+    $(btn).click(function(){
+        $("#fileDialog").dialog("open");
+    })
+}
