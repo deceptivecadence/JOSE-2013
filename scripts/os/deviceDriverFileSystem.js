@@ -18,7 +18,7 @@ function DeviceDriverFileSystem(){                     // Add or override specif
         // More?
     };
     this.isr = function(params){
-        //expect to receive params as follows[filename,operation,data,from user | os]
+        //expect to receive params as follows[filename | new program,operation,data,from user | os]
         switch(params[1]){
             case 0: createFile(params); break;
             case 1: readFile(params); break;
@@ -27,6 +27,8 @@ function DeviceDriverFileSystem(){                     // Add or override specif
             case 4: format(); break;
             case 5: listFiles(); break;
             case 6: findProgramFiles(); break;
+            case 7: swapProcess(params); break;
+            default: console.log("blakejrlbkadflkdaf"); break;
         }
     };
     this.test = function(){
@@ -119,6 +121,7 @@ function createFile(params){
 }
 //expect to receive params as follows[filename,operation,"",from user | os]
 function readFile(params){
+    console.log("readddeing")
     var searchFor = params[0];
     var fileFound = false;
     var i = "001";
@@ -142,7 +145,7 @@ function readFile(params){
             }
 
             if(params[3]){ //if FROM_OS == 1
-                _TempFileSwapQueue.push(dataArr)
+                _TempFileSwapQueue.enqueue(dataArr.join(""))
             }
             else{ // then from user
                 _StdIn.putText(dataArr.join(""));
@@ -164,9 +167,13 @@ function readFile(params){
 //TODO: FIX LINK EXISTS
 function writeFile(params){
     var filename = params[0];
-    var data = params[2];
+    var data = params[2]
+    if (typeof data === "object"){
+        data = params[2].join(" ");
+    }
     var fileFound = false;
     var sections = Math.ceil(data.length/60);
+    console.log(data)
     var dataSections = data.match(/.{1,60}/g) || [];
 
     var i = "001";
@@ -247,6 +254,22 @@ function deleteFile(params){
         }
     }
     updateMBR();
+}
+
+//expect to receive params as follows[old program, operation, new program]
+function swapProcess(params){
+    console.log("size "+_TempFileSwapQueue.getSize())
+    var oldProgram = params[0];
+    var newProgram = params[2];
+    readFile( ["program"+newProgram.pid, READ, "", FROM_OS]);
+    createFile(["program"+oldProgram.pid, CREATE]);
+    var pInMem = _MMU.memory.memoryArray.slice(oldProgram.baseIndex);
+    writeFile(["program"+oldProgram.pid, WRITE, pInMem, FROM_OS]);
+    _MMU.pidOnFile.push(oldProgram.pid);
+    _MMU.pidOnFile.pop(newProgram.pid);
+    //console.log(_TempFileSwapQueue.dequeue().split(" "))
+    _MMU.memory.memoryArray.splice.apply(_MMU.memory.memoryArray, [oldProgram.baseIndex,0].concat(_TempFileSwapQueue.dequeue().split(" ")))
+    _CpuScheduler.loadProgram(newProgram);
 }
 
 function format(){

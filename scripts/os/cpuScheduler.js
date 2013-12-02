@@ -29,21 +29,29 @@ function CpuScheduler(){
         }
         if(_ReadyQueue.getSize()>0){
             var newProgram = _ReadyQueue.dequeue();
-            if(newProgram.pid in _MMU.pidOnFile){
-                //program is read from disk
-               _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+newProgram.pid, READ, "", FROM_OS]) );
-               var pOnDisk = _TempFileSwapQueue.dequeue();
-               pOnDisk = pOnDisk.split(" ");
-               //program from memory is written to disk
-               var pInMem = _MMU.memory.memoryArray.slice(_CPU.program.baseIndex);
-               _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+_CPU.program.pid, WRITE, pInMem, FROM_OS]) );
+            var oldProgram = _CPU.program;
+            console.log(newProgram.pid)
+            console.log(_MMU.pidOnFile)
+            DID_SWAP = true;
+            if(_MMU.pidOnFile.some(function(element,index,array){return element == newProgram.pid})){
+                console.log("switch to disk")
+                //program is swapped
+                DID_SWAP = false;
+               _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [oldProgram, SWAP, newProgram]) );
+               console.log(_KernelInterruptQueue)
             }
-            hostLog("Switched to program with pid: "+newProgram.pid);
-            _CPU.loadProgram(newProgram);
-            _CPU.isExecuting = true;
+            console.log(DID_SWAP)
+            if(DID_SWAP){
+            this.loadProgram(newProgram);
+            }
         }
     }
 
+    this.loadProgram = function(newProgram){
+        hostLog("Switched to program with pid: "+newProgram.pid);
+        _CPU.loadProgram(newProgram);
+        _CPU.isExecuting = true;
+    }
     this.changedSchedule = function (newSched){
         switch(newSched){
             case "rr": this.schedule = "rr"; this.quantum = 6;

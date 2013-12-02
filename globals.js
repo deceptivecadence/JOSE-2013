@@ -42,8 +42,10 @@ var DELETE = 3;
 var FORMAT = 4;
 var LIST = 5;
 var PID_ON_FILE = 6;
+var SWAP = 7;
 var FROM_USER = 0;
 var FROM_OS = 1;
+var DID_SWAP = false;
 
 
 //

@@ -78,7 +78,8 @@ function MemoryManager(){
             processBlock.init();
             this.programArray.push(processBlock);
 	    	_KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+this.programsLoaded,CREATE]) );
-			_KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+this.programsLoaded,WRITE,program.join(" ")]) );
+			_KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["program"+this.programsLoaded,WRITE,bufferedProgram.join(" ")]) );
+			this.pidOnFile.push(this.programsLoaded);
 			this.programsLoaded++
 
 	    }
