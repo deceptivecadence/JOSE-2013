@@ -1,5 +1,4 @@
-
-
+var counter = 0
 function fillMemory(){
     var size = 768;
     var sections = 8;
@@ -52,7 +51,19 @@ function updateDisplay(){
     |---||----|--------|
 
     */
-
-
-    $("#fileDialog")
+    if(counter % 5 === 0){
+        //var table = $("#fileSystem tbody");
+        $("#fileSystem tbody:first-child").find("#main").text(MBR);
+        $("#fileSystem tbody:first-child").find("#address").text(sessionStorage.getItem(MBR).substring(0,4));
+        $("#fileSystem tbody:first-child").find("#data").text(sessionStorage.getItem(MBR).substring(4));
+        for(var i="001"; i !== "400"; i = stringFormatAndInc(i)){
+            $("#"+i).find("#main").text(i);
+            $("#"+i).find("#address").text(sessionStorage.getItem(i).substring(0,4));
+            $("#"+i).find("#data").text(sessionStorage.getItem(i).substring(5));
+        }
+        counter = 0
+    }
+    counter++
+    //console.log(counter)
+    
 }

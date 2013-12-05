@@ -72,6 +72,11 @@ table{
 	margin-left: -10px;
 }
 
+.ui-dialog{
+	overflow: scroll;
+	background: rgba(0, 0, 0, 0.5)
+}
+
 .pcbtable{
 	display: inline-block;
 }

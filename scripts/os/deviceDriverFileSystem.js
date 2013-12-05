@@ -400,8 +400,8 @@ function updateMBR(){
 function stringFormatAndInc(integer){
     var newInt = parseInt(integer);
     newInt++;
-    if(integer.substring(1,3) === "77" && newInt >= 100){
-        var hundreth = parseInt(integer.substring(0,1))++;
+    if(integer.substring(1,3) === "77"){
+        var hundreth = parseInt(integer.substring(0,1)) + 1;
         return ""+hundreth+"00";
     }
     else if(newInt >= 100){

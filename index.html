@@ -48,9 +48,15 @@
    <script type="text/javascript">
         $(document).ready(function(){
             $("#fileDialog").dialog({
-                autoOpen: false
+                autoOpen: false,
+                height: 600,
+                width: 600,
             })
             format();
+            $("#fileSystem tbody").append("<tr id='"+MBR+"'><td id='main'>"+MBR+"</td><td id='address'>"+sessionStorage.getItem(MBR).substring(0,4)+"</td><td id='data'>"+sessionStorage.getItem(MBR).substring(4)+"</td></tr>");
+            for(var i="001"; i !== "400"; i = stringFormatAndInc(i)){
+                $("#fileSystem tbody").append("<tr id='"+i+"'><td id='main'>"+i+"</td><td id='address'>"+sessionStorage.getItem(i).substring(0,4)+"</td><td id='data'>"+sessionStorage.getItem(i).substring(5)+"</td></tr>");
+            }
         });
    </script>
    </head>
@@ -98,9 +104,9 @@
          id = "btnFile"
          name="brnFile"
          class="normal_button"
-         value="View File System"
+         value="File System"
          tabindex="4"
-         onclick="hostBtnFile_click(this);">
+         onclick="hostBtnFile_click(this);"> Please Click Twice (only need to do it once)
    </div>
    
    <div id="divStatusTotal">
@@ -246,12 +252,13 @@
       </label>
    </div>
 
-    <div id="fileDialog" title="File System">
+    <div id="fileDialog" title="File System (5 second refresh)">
         <table id="fileSystem" border="1">
             <thead>
-                <tr></tr>
             </thead>
-            
+            <tbody>
+                
+            </tbody>
         </table>
     </div>
 </div>
