@@ -30,17 +30,17 @@ function CpuScheduler(){
         if(_ReadyQueue.getSize()>0){
             var newProgram = _ReadyQueue.dequeue();
             var oldProgram = _CPU.program;
-            console.log(newProgram.pid)
-            console.log(_MMU.pidOnFile)
+            //console.log(newProgram.pid)
+            //console.log(_MMU.pidOnFile)
             DID_SWAP = true;
             if(_MMU.pidOnFile.some(function(element,index,array){return element == newProgram.pid})){
                 console.log("switch to disk")
                 //program is swapped
                 DID_SWAP = false;
                _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [oldProgram, SWAP, newProgram]) );
-               console.log(_KernelInterruptQueue)
+               //console.log(_KernelInterruptQueue)
             }
-            console.log(DID_SWAP)
+            //console.log(DID_SWAP)
             if(DID_SWAP){
                 this.loadProgram(newProgram);
             }
