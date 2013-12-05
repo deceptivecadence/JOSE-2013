@@ -36,6 +36,12 @@ function krnBootstrap()      // Page 8.
    krnKeyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
    krnTrace(krnKeyboardDriver.status);
 
+   //Load the File System Device Driver
+   krnTrace("Loading the file system device driver.");
+   krnFSDeviceDriver = new DeviceDriverFileSystem();     // Construct it.  TODO: Should that have a _global-style name?
+   krnFSDeviceDriver.driverEntry();                    // Call the driverEntry() initialization routine.
+   krnTrace(krnFSDeviceDriver.status);
+
    //
    // ... more?
    //
@@ -134,6 +140,18 @@ function krnInterruptHandler(irq, params)    // This is the Interrupt Handler Ro
         case INVALID_KEYBOARD_INPUT_IRQ:
             osTrapError(params);
             break;
+        case INVALID_OP_CODE:
+            osInvalidOpCode(params);
+            break;
+        case MEMORY_OUT_OF_BOUNDS:
+            osProgramOutOfBounds(params)
+            break;
+        case SOFTWARE_CONTEXT_SWITCH:
+            osSoftwareContextSwitch(params);
+            break;
+        case FILESYSTEM_IRQ:
+            krnFSDeviceDriver.isr(params);
+            break;
         default: 
             krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
     }
@@ -200,4 +218,22 @@ function krnTrapError(msg)
 function osTrapError(params)
 {
     hostLog("Not a valid keyboard input: " + params);
+}
+
+function osProgramOutOfBounds(params){
+    _CPU.terminate();
+    var message = "Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to access outside of its memory boundry. Process killed.";
+    hostLog(message);
+    _StdIn.putText(message);
+}
+
+function osInvalidOpCode(params){
+    _CPU.terminate();
+    var message = "Program with pid: "+params[0]+" at "+params[1].toString(16)+" tried to execute with an invalid op code. Process killed.";
+    hostLog(message);
+    _StdIn.putText(message);
+}
+
+function osSoftwareContextSwitch(params){
+    _CpuScheduler.cSwitch();
 }

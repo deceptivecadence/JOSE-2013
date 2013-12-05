@@ -40,7 +40,7 @@ function hostInit()
    if (typeof Glados === "function") {
       _GLaDOS = new Glados();
       _GLaDOS.init();
-   };
+   }
 
 }
 
@@ -89,8 +89,11 @@ function hostBtnStartOS_click(btn)
     _MMU.init();
     _Memory = new Memory();
     _Memory.init();
-    _ReadyQueue = new Queue();
     fillMemory();
+    _ReadyQueue = new Queue();
+    _CpuScheduler = new CpuScheduler();
+    _CpuScheduler.init();
+    _TempFileSwapQueue = new Queue();
 
 
     // ... then set the host clock pulse ...
@@ -124,4 +127,10 @@ function hostBtnStep_click(btn)
 {
     _CPU.step = true;
     _CPU.isExecuting = !_CPU.isExecuting;
+}
+
+function hostBtnFile_click(btn){
+    $(btn).click(function(){
+        $("#fileDialog").dialog("open");
+    })
 }

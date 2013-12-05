@@ -12,7 +12,7 @@ function Shell() {
     this.commandList = [];
     this.curses      = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
     this.adviceArray = ["You should probably just talk it out."];
-    this.apologies   = "[sorry]";
+    this.apologies   = "[sorry]"; 
     // Methods
     this.init        = shellInit;
     this.putPrompt   = shellPutPrompt;
@@ -28,56 +28,56 @@ function shellInit() {
     // ver
     sc = new ShellCommand();
     sc.command = "ver";
-    sc.description = "- Displays the current version data.";
+    sc.description = "- Displays the current version data";
     sc.function = shellVer;
     this.commandList[this.commandList.length] = sc;
     
     // help
     sc = new ShellCommand();
     sc.command = "help";
-    sc.description = "- This is the help command. Seek help.";
+    sc.description = "- This is the help command. Seek help";
     sc.function = shellHelp;
     this.commandList[this.commandList.length] = sc;
     
     // shutdown
     sc = new ShellCommand();
     sc.command = "shutdown";
-    sc.description = "- Shuts down the virtual OS but leaves the underlying hardware simulation running.";
+    sc.description = "- Turns off the OS, leaves the hardware simulation running";
     sc.function = shellShutdown;
     this.commandList[this.commandList.length] = sc;
 
     // cls
     sc = new ShellCommand();
     sc.command = "cls";
-    sc.description = "- Clears the screen and resets the cursor position.";
+    sc.description = "- Clears the screen and resets the cursor position";
     sc.function = shellCls;
     this.commandList[this.commandList.length] = sc;
 
     // man <topic>
     sc = new ShellCommand();
     sc.command = "man";
-    sc.description = "<topic> - Displays the MANual page for <topic>.";
+    sc.description = "<topic>- Displays the MANual page for <topic>";
     sc.function = shellMan;
     this.commandList[this.commandList.length] = sc;
     
     // trace <on | off>
     sc = new ShellCommand();
     sc.command = "trace";
-    sc.description = "<on | off> - Turns the OS trace on or off.";
+    sc.description = "<on | off> - Turns the OS trace on or off";
     sc.function = shellTrace;
     this.commandList[this.commandList.length] = sc;
 
     // rot13 <string>
     sc = new ShellCommand();
     sc.command = "rot13";
-    sc.description = "<string> - Does rot13 obfuscation on <string>.";
+    sc.description = "<string>- Does rot13 obfuscation on <string>";
     sc.function = shellRot13;
     this.commandList[this.commandList.length] = sc;
 
     // prompt <string>
     sc = new ShellCommand();
     sc.command = "prompt";
-    sc.description = "<string> - Sets the prompt.";
+    sc.description = "<string>- Sets the prompt";
     sc.function = shellPrompt;
     this.commandList[this.commandList.length] = sc;
     
@@ -99,38 +99,121 @@ function shellInit() {
     //status
     sc = new ShellCommand();
     sc.command = "status";
-    sc.description = "<string> set display bar text"
+    sc.description = "<string>- set display bar text"
     sc.function = shellStatus;
     this.commandList[this.commandList.length] = sc;
     
     //trap
     sc = new ShellCommand();
     sc.command = "ktrap";
-    sc.description = " - creates a kernal trap"
+    sc.description = "- creates a kernal trap"
     sc.function = shellTrap;
     this.commandList[this.commandList.length] = sc;
 
     //load
     sc = new ShellCommand();
     sc.command = "load";
-    sc.description = " - loads program hex"
+    sc.description = "- loads program hex"
     sc.function = shellLoad;
     this.commandList[this.commandList.length] = sc;
 
     //advice
     sc = new ShellCommand();
     sc.command = "advice";
-    sc.description = " - need advice on life?"
+    sc.description = "- need advice on life?"
     sc.function = shellAdvice;
     this.commandList[this.commandList.length] = sc;
 
     //run
     sc = new ShellCommand();
     sc.command = "run";
-    sc.description = " - <pid> run the program specified by the pid"
+    sc.description = "<pid>- run the program specified by the pid"
     sc.function = shellRun;
     this.commandList[this.commandList.length] = sc;
 
+    //kill
+    sc = new ShellCommand();
+    sc.command = "kill";
+    sc.description = "<pid>- kill the program specified by the pid"
+    sc.function = shellKill;
+    this.commandList[this.commandList.length] = sc;
+
+    //listPid
+    sc = new ShellCommand();
+    sc.command = "lpid";
+    sc.description = "- Lists all the running processes' pids"
+    sc.function = shellLPid;
+    this.commandList[this.commandList.length] = sc;
+
+    //run all
+    sc = new ShellCommand();
+    sc.command = "runall";
+    sc.description = "- Runs all programs loaded into memory"
+    sc.function = shellRunAll;
+    this.commandList[this.commandList.length] = sc;
+
+    //quantum
+    sc = new ShellCommand();
+    sc.command = "quantum";
+    sc.description = "<int>- changes the Round Robin interval"
+    sc.function = shellQuantum;
+    this.commandList[this.commandList.length] = sc;
+
+    //Create File
+    sc = new ShellCommand();
+    sc.command = "create";
+    sc.description = "<file>- creates a file (no spaces)"
+    sc.function = shellCreate;
+    this.commandList[this.commandList.length] = sc;
+
+    //Read File
+    sc = new ShellCommand();
+    sc.command = "read";
+    sc.description = "<file>- reads file"
+    sc.function = shellRead;
+    this.commandList[this.commandList.length] = sc;
+
+    //Write File
+    sc = new ShellCommand();
+    sc.command = "write";
+    sc.description = "<file> <data>- writes to file"
+    sc.function = shellWrite;
+    this.commandList[this.commandList.length] = sc;
+
+    //Delete File
+    sc = new ShellCommand();
+    sc.command = "delete";
+    sc.description = "<filename>- deletes file"
+    sc.function = shellDelete;
+    this.commandList[this.commandList.length] = sc;
+
+    //Format System
+    sc = new ShellCommand();
+    sc.command = "format";
+    sc.description = "- formats the file system"
+    sc.function = shellFormat;
+    this.commandList[this.commandList.length] = sc;
+
+    //ls - list files
+    sc = new ShellCommand();
+    sc.command = "ls";
+    sc.description = "- list files in disk"
+    sc.function = shellList;
+    this.commandList[this.commandList.length] = sc;
+
+    //setschedule
+    sc = new ShellCommand();
+    sc.command = "setschedule";
+    sc.description = "<rr | fcfs | priority> sets scheduling algorithm"
+    sc.function = shellSetSched;
+    this.commandList[this.commandList.length] = sc;
+
+    //getschedule
+    sc = new ShellCommand();
+    sc.command = "getschedule";
+    sc.description = "current scheduling algorithm running"
+    sc.function = shellGetSched;
+    this.commandList[this.commandList.length] = sc;
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
 
@@ -429,6 +512,7 @@ function shellStatus(args){
     statusContext = statusCanvas.getContext('2d');
     statusContext.clearRect(0,0,715,20);
     statusContext.font = "15px Arial"
+    statusContext.fillStyle="#FFFFFF";
     if (typeof args[0] == "undefined"){
         statusContext.fillText("",3,15);
     }else{
@@ -447,14 +531,18 @@ function shellTrap(args){
 //loads user hex program from pasted input
 function shellLoad(args){
     var text = $('#taProgramInput').val();
+    var priority = args[0];
+    if(isNaN(parseInt(priority))){
+        priority = 1;
+    }
     text = text.toUpperCase();
     var patt = /^([A-F][A-F]\s?|[A-F]\d\s?|\d[A-F]\s?|\d\d\s?)+$/
     var result = patt.test(text);
     // console.log(result);
     // console.log(text);
     if(result){
-        _CPU.load(text.split(" ")); // This initiates the loading, the cpu which calls mmu
-        _StdIn.putText("program loaded, pid: " + (_MMU.processArray.length - 1 ));
+        _CPU.load(text.split(" "), priority); // This initiates the loading, the cpu which calls mmu
+        _StdIn.putText("program loaded, pid: " + (_MMU.programArray.length - 1 ));
     }
     else{
         _StdIn.putText("INVALID HEX");
@@ -469,27 +557,99 @@ function shellAdvice(args){
 }
 
 function shellRun(args){
-    var pid = parseInt(args[0]);
-    if (typeof pid === 'number'){
+    var pidArg = parseInt(args[0]);
+    if (!isNaN(pidArg)){
         var pidFound = false;
-        for (var i=0; i<_MMU.processArray.length; i++){
-            var process = _MMU.processArray[i];
+        for (var i=0; i<_MMU.programArray.length; i++){
+            var program = _MMU.programArray[i];
             if(!pidFound){
-                if(process.pid === pid){
-                    _ReadyQueue.enqueue(process);
+                //console.log(program.pid +" "+ pidArg)
+                if(program.pid === pidArg){
                     _CPU.init(); //Clears the CPU info for new program
-                    _CPU.program = _ReadyQueue.dequeue();
+                    program = _MMU.programArray[i];
+                    _ReadyQueue.enqueue(program);
+                    _CPU.loadProgram(_ReadyQueue.dequeue());
                     _CPU.isExecuting = true;
                     pidFound = true;
                     // console.log("I IS READY TO EXECUTE")
                 }
-                else{
-                    _StdIn.putText("Pid does not exist")
-                }
+            }else{
+		//_StdIn.putText("Pid does not exist")
             }
         }
+    }else{
+        _StdIn.putText("Please provide a proper pid");
+    }
+}
+
+function shellKill(args){
+    var killedPid = parseInt(args[0]);
+    var runningProgram = _CPU.program;
+    if(_ReadyQueue.containsProgram(killedPid)){
+        _ReadyQueue.removeProgram(killedPid)
+        //console.log("kill first if")
+    }
+    if(runningProgram.pid === killedPid){
+        _CPU.isExecuting = false;
+        runningProgram.update("killed");
+        _StdIn.putText("Process with pid: "+args[0]+" has been killed")
+    }
+}
+
+function shellLPid(args){
+    _StdIn.putText("Active Process: "+"["+_CPU.program.pid+"] "+_ReadyQueue.toStringSpecific("pid"));
+}
+
+function shellRunAll(args){
+
+    for(var i=0; i<_MMU.programArray.length; i++){
+        _MMU.programArray[i].resetVals();
+        _ReadyQueue.enqueue(_MMU.programArray[i]);
+    }
+    _CPU.loadProgram(_ReadyQueue.dequeue());
+    _CPU.isExecuting = true;
+}
+
+function shellQuantum(args){
+    var quantum = parseInt(args[0])
+    if(typeof quantum === "number"){
+        _CpuScheduler.quantum = quantum;
+    }
+}
+
+function shellCreate(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],CREATE,"",FROM_USER]) );
+}
+
+function shellRead(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],READ,"",FROM_USER]) );
+}
+
+function shellWrite(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args.shift(),WRITE,args.join(" "),FROM_USER]) );
+}
+
+function shellDelete(args){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],DELETE]) );
+}
+
+function shellFormat(){
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["none",FORMAT]) );
+}
+
+function shellList(){
+     _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, ["none",LIST]) );
+}
+
+function shellSetSched(args){
+    if(_CpuScheduler.changedSchedule(args[0])){
+        _StdIn.putText("Schedule changed to: "+_CpuScheduler.schedule);
     }
     else{
-        _StdIn.putText("Please provide a proper pid")
+        _StdIn.putText("Not a correct scheduling algorithm")
     }
+}
+
+function shellGetSched(){
+    _StdIn.putText(_CpuScheduler.schedule);
 }

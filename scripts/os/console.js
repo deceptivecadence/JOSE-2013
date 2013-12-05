@@ -117,6 +117,7 @@ function CLIconsole() {
        var oldY = this.CurrentYPosition;
        // console.log(this.CurrentYPosition);
        if (this.CurrentYPosition >= 489){
+        //console.log("yespritn")
             var data = _DrawingContext.getImageData(0,0,_Canvas.width,_Canvas.height);
             this.clearScreen();
             this.resetXY();

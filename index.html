@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-   <meta name="author"             content="Alan G. Labouseur" />
+   <meta name="author"             content="Mike Mucci" />
    <link rel="stylesheet" href="jose.css" type="text/css" media="screen" />
    <link rel="shortcut icon" href="favicon.png" />
 
@@ -12,8 +12,9 @@
    </title>
    
    <!--Adds jQuery-->
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script src="https://raw.github.com/caleb531/jcanvas/master/jcanvas.min.js"></script>
+   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+   <script src="//raw.github.com/caleb531/jcanvas/master/jcanvas.js"></script>
    
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
    <script type="text/javascript" src="globals.js"></script>	
@@ -31,16 +32,34 @@
    <script type="text/javascript" src="scripts/os/console.js"></script>	
    <script type="text/javascript" src="scripts/os/deviceDriver.js"></script>
    <script type="text/javascript" src="scripts/os/deviceDriverKeyboard.js"></script>
+   <script type="text/javascript" src="scripts/os/deviceDriverFileSystem.js"></script>
    <script type="text/javascript" src="scripts/os/queue.js"></script>
    <script type="text/javascript" src="scripts/os/shell.js"></script>
    <script type="text/javascript" src="scripts/os/kernel.js"></script>
    <script type="text/javascript" src="scripts/os/mmu.js"></script>
    <script type="text/javascript" src="scripts/os/pcb.js"></script>
+   <script type="text/javascript" src="scripts/os/cpuScheduler.js"></script>
 
    <!-- Other Routines -->
    <script type="text/javascript" src="scripts/utils.js"></script>
    <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script>
+   <!-- // <scriptd type="text/javascript" src="test.js"></script> -->
 
+   <script type="text/javascript">
+        $(document).ready(function(){
+            $("#fileDialog").dialog({
+                autoOpen: false,
+                height: 600,
+                width: 600,
+            })
+            format();
+            console.log("sir")
+            $("#fileSystem tbody").append("<tr class ='FS' id='"+MBR+"'><td id='main'>"+MBR+"</td><td id='address'>"+sessionStorage.getItem(MBR).substring(0,3)+"</td><td id='data'>"+sessionStorage.getItem(MBR).substring(4)+"</td></tr>");
+            for(var i="001"; i !== "400"; i = stringFormatAndInc(i)){
+                $("#fileSystem tbody").append("<tr class ='FS' id='"+i+"'><td id='main'>"+i+"</td><td id='address'>"+sessionStorage.getItem(i).substring(0,4)+"</td><td id='data'>"+sessionStorage.getItem(i).substring(5)+"</td></tr>");
+            }
+        });
+   </script>
    </head>
 
 <body onload="hostInit();">
@@ -81,6 +100,14 @@
              value="Step"
              tabindex="3"
              onclick="hostBtnStep_click(this);">
+
+    <input type="button"
+         id = "btnFile"
+         name="brnFile"
+         class="normal_button"
+         value="File System"
+         tabindex="4"
+         onclick="hostBtnFile_click(this);"> Please Click Twice (only need to do it once)
    </div>
    
    <div id="divStatusTotal">
@@ -93,7 +120,7 @@
       </div>
       <div id="divStatus">
          <canvas id="status"
-                 width="590px"
+                 width="570px"
                  height="20px">
             
          </canvas>
@@ -102,37 +129,13 @@
    
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
       <canvas id="display"
-              width="500px"
+              width="550px"
               height="500px"
               tabindex="3">
       </canvas>
    </div>
    <div id="hardwareDisplay">
-        <div id="divMemory">  
-            <label>Memory</label>
-            <br>
-            <table id="tableMemory" border="1">
-                <thead>
-                    <tr>
-                        <td>X</td>
-                        <td>0</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>
-                </thead>
-
-                <tbody id="bodyMemory">
-
-                </tbody>
-            </table>     
-        </div>
-
-       <div id="divCpu">
+        <div id="divCpu">
            <label>CPU</label>
            <br>
            <table id="tableCpu" border="1">
@@ -157,31 +160,108 @@
                </tbody>
            </table>
        </div>
+        
+        <div id="divMemory">  
+            <label>Memory</label>
+            <br>
+            <table id="tableMemory" border="1">
+                <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                </thead>
+
+                <tbody id="bodyMemory">
+
+                </tbody>
+            </table>     
+        </div>
+
+       <div id="divPcb">
+            <label>PCB</label>
+            <br>
+            <table id="tablePcb" class="pcbtable" border="1">
+                <thead>
+                    <tr>
+                        <td>Pid</td>
+                        <td>State</td>
+                        <td>Base</td>
+                        <td>End</td>
+                        <td>PC</td>
+                        <!-- <td>Acc</td>
+                        <td>Xreg</td>
+                        <td>Yreg</td>
+                        <td>Zflag</td> -->
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td id="pidRow">-</td>
+                        <td id="stateRow">-</td>
+                        <td id="baseRow">-</td>
+                        <td id="endRow">-</td>
+                        <td id="pcRow">-</td>
+                    </tr>
+                    <tr>
+                        <td id="pidRow">-</td>
+                        <td id="stateRow">-</td>
+                        <td id="baseRow">-</td>
+                        <td id="endRow">-</td>
+                        <td id="pcRow">-</td>
+                    </tr>
+                    <tr>
+                        <td id="pidRow">-</td>
+                        <td id="stateRow">-</td>
+                        <td id="baseRow">-</td>
+                        <td id="endRow">-</td>
+                        <td id="pcRow">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-   <div id="divLog" style="margin-left:520px;">
+   <div id="divLog" style="margin-left:570px;">
       <label>
          Log
          <br>
          <textarea name="taLog"
                    id  ="taLog"
-                   rows="26"
-                   cols="30"
+                   rows="22"
+                   cols="21"
          ></textarea>
       </label>
    </div>
    
-   <div id="divUserProgramInput" style="margin-left:520px;">
+   <div id="divUserProgramInput" style="margin-left:570px;">
       <label>
          User Program Input
          <br>
          <textarea name="taProgramInput"
                    id  ="taProgramInput"
-                   rows="8"
-                   cols="30"
+                   rows="5"
+                   cols="21"
          ></textarea>
       </label>
    </div>
 
+    <div id="fileDialog" title="File System (5 second refresh)">
+        <table id="fileSystem" border="1">
+            <thead>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <p class="footerText" style="clear:both;">
