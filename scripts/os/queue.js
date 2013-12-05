@@ -22,7 +22,8 @@ function Queue()
     };
 
     this.enqueue = function(element) {
-        this.q.push(element);        
+        this.q.push(element);
+        _CpuScheduler.changedSchedule(_CpuScheduler.schedule); //schedule doesn't change, but used for ordering      
     };
     
     this.dequeue = function() {

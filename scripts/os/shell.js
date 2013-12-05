@@ -531,13 +531,17 @@ function shellTrap(args){
 //loads user hex program from pasted input
 function shellLoad(args){
     var text = $('#taProgramInput').val();
+    var priority = args[0];
+    if(isNaN(parseInt(priority))){
+        priority = 1;
+    }
     text = text.toUpperCase();
     var patt = /^([A-F][A-F]\s?|[A-F]\d\s?|\d[A-F]\s?|\d\d\s?)+$/
     var result = patt.test(text);
     // console.log(result);
     // console.log(text);
     if(result){
-        _CPU.load(text.split(" ")); // This initiates the loading, the cpu which calls mmu
+        _CPU.load(text.split(" "), priority); // This initiates the loading, the cpu which calls mmu
         _StdIn.putText("program loaded, pid: " + (_MMU.programArray.length - 1 ));
     }
     else{

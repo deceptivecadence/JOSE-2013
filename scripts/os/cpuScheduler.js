@@ -32,16 +32,16 @@ function CpuScheduler(){
             var oldProgram = _CPU.program;
             //console.log(newProgram.pid)
             //console.log(_MMU.pidOnFile)
-            DID_SWAP = true;
-            if(_MMU.pidOnFile.some(function(element,index,array){return element == newProgram.pid})){
+            DID_SWAP = false;
+            if(_MMU.pidOnFile[0] === newProgram.pid){
                 console.log("switch to disk")
                 //program is swapped
-                DID_SWAP = false;
+                DID_SWAP = true;
                _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [oldProgram, SWAP, newProgram]) );
                //console.log(_KernelInterruptQueue)
             }
             //console.log(DID_SWAP)
-            if(DID_SWAP){
+            if(!DID_SWAP){
                 this.loadProgram(newProgram);
             }
         }
@@ -56,9 +56,9 @@ function CpuScheduler(){
         switch(newSched){
             case "rr": this.schedule = "rr"; this.quantum = 6;
                 break;
-            case "fcfs": this.schedule = "fcfs"; this.quantum = 1123581321345589144;
+            case "fcfs": this.schedule = "fcfs"; this.quantum = 1123581321345589144; _ReadyQueue.q.sort(function(a,b){return a.pid - b.pid});
                 break;
-            case "priority": this.schedule = "priority";
+            case "priority": this.schedule = "priority"; this.quantum = 1123581321345589144; _ReadyQueue.q.sort(function(a,b){return a.priority - b.priority});
                 break;
             default: return false;
         }

@@ -43,7 +43,7 @@
    <!-- Other Routines -->
    <script type="text/javascript" src="scripts/utils.js"></script>
    <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script>
-   <!-- // <script type="text/javascript" src="test.js"></script> -->
+   <!-- // <scriptd type="text/javascript" src="test.js"></script> -->
 
    <script type="text/javascript">
         $(document).ready(function(){
@@ -53,9 +53,10 @@
                 width: 600,
             })
             format();
-            $("#fileSystem tbody").append("<tr id='"+MBR+"'><td id='main'>"+MBR+"</td><td id='address'>"+sessionStorage.getItem(MBR).substring(0,4)+"</td><td id='data'>"+sessionStorage.getItem(MBR).substring(4)+"</td></tr>");
+            console.log("sir")
+            $("#fileSystem tbody").append("<tr class ='FS' id='"+MBR+"'><td id='main'>"+MBR+"</td><td id='address'>"+sessionStorage.getItem(MBR).substring(0,3)+"</td><td id='data'>"+sessionStorage.getItem(MBR).substring(4)+"</td></tr>");
             for(var i="001"; i !== "400"; i = stringFormatAndInc(i)){
-                $("#fileSystem tbody").append("<tr id='"+i+"'><td id='main'>"+i+"</td><td id='address'>"+sessionStorage.getItem(i).substring(0,4)+"</td><td id='data'>"+sessionStorage.getItem(i).substring(5)+"</td></tr>");
+                $("#fileSystem tbody").append("<tr class ='FS' id='"+i+"'><td id='main'>"+i+"</td><td id='address'>"+sessionStorage.getItem(i).substring(0,4)+"</td><td id='data'>"+sessionStorage.getItem(i).substring(5)+"</td></tr>");
             }
         });
    </script>

@@ -47,8 +47,8 @@ function Cpu() {
     };
 
     //program - program (string array)
-    this.load = function(program){ 
-        _MMU.load(program);
+    this.load = function(program, priority){ 
+        _MMU.load(program, priority);
     }
 
     this.loadProgram = function(pcb){
@@ -65,6 +65,7 @@ function Cpu() {
         if(this.program.offset !== 0){
             this.PC = this.PC % this.program.offset
         }
+        console.log("PC: "+this.PC)
         return _MMU.accessMem(this.PC,0,this.program.offset) //memory.memoryArray[this.PC]//offset will change within individual instruction function
     }
 
@@ -92,6 +93,8 @@ function Cpu() {
 
     this.execute = function(inst){
         //console.log(inst + " INST");
+        console.log(inst)
+        console.log(_MMU.memory.memoryArray.indexOf(inst))
         switch(inst){
             case "A9":this.loadAcc(); break;
             case "AD":this.loadAccFromMemory(); break;

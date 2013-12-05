@@ -265,17 +265,20 @@ function deleteFile(params){
 
 //expect to receive params as follows[old program, operation, new program]
 function swapProcess(params){
-    console.log("size "+_TempFileSwapQueue.getSize())
+    //console.log("size "+_TempFileSwapQueue.getSize())
     var oldProgram = params[0];
     var newProgram = params[2];
     readFile( ["program"+newProgram.pid, READ, "", FROM_OS]);
     createFile(["program"+oldProgram.pid, CREATE,"",FROM_OS]);
-    var pInMem = _MMU.memory.memoryArray.splice(oldProgram.baseIndex,oldProgram.endIndex);
+    var pInMem = _MMU.memory.memoryArray.splice(oldProgram.baseIndex,oldProgram.endIndex+1);
     writeFile(["program"+oldProgram.pid, WRITE, pInMem, FROM_OS]);
     _MMU.pidOnFile.push(oldProgram.pid);
-    _MMU.pidOnFile.pop(newProgram.pid);
+    _MMU.pidOnFile.pop();
     //console.log(_TempFileSwapQueue.dequeue().split(" "))
     _MMU.memory.memoryArray.splice.apply(_MMU.memory.memoryArray, [oldProgram.baseIndex,0].concat(_TempFileSwapQueue.dequeue().split(" ")))
+    newProgram.baseIndex = oldProgram.baseIndex;
+    newProgram.endIndex = oldProgram.endIndex;
+    newProgram.offset = oldProgram.offset;
     _CpuScheduler.loadProgram(newProgram);
 }
 

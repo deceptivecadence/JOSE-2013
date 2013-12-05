@@ -18,6 +18,7 @@ function ProcessControlBlock(){
 	    this.Yreg  			= 0;     // Y register
 	    this.Zflag 			= 0;     // Z-ero flag
 	    this.offset         = _MMU.offset;
+	    this.priority       = 1;
 	}
 	
 	this.update = function(state){

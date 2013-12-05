@@ -15,7 +15,7 @@ function MemoryManager(){
 		this.pidOnFile = [];
 	}
 
-	this.load = function(program){
+	this.load = function(program, priority){
 		if (this.memory.memoryArray.length !== MEMORY_LENGTH * 3){
 	        if($.isArray(program)){
 	        	if(program.length <= MEMORY_LENGTH){
@@ -34,6 +34,7 @@ function MemoryManager(){
 		            //console.log(processBlock);
 		            processBlock.init();
 		            this.programArray.push(processBlock);
+		            processBlock.priority = priority
 		            this.programsLoaded++
 		            //console.log(processBlock);
 
