@@ -32,4 +32,12 @@ function ProcessControlBlock(){
 	    this.Yreg  			= _CPU.Yreg;     // Y register
 	    this.Zflag 			= _CPU.Zflag;     // Z-ero flag
 	}
+
+	this.resetVals = function(){
+		this.PC             = 0;     // Program Counter
+	    this.Acc   			= 0;     // Accumulator
+	    this.Xreg  			= 0;     // X register
+	    this.Yreg  			= 0;     // Y register
+	    this.Zflag 			= 0;     // Z-ero flag
+	}
 }

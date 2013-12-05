@@ -107,7 +107,8 @@ function Cpu() {
             case "D0":this.branchIfZero(); break;
             case "EE":this.incrementByByte(); break;
             case "FF":this.systemCall(); break;
-            default: this.invalidOpCode(); break;
+            case  "0":this.breakOp(); break;
+            default  :this.invalidOpCode(); break;
         }
         //console.log("PC: " + this.PC.toString(16) + " Acc: " + this.Acc + " X-reg: " + this.Xreg + " Y-reg: " + this.Yreg + " Z-flag: " + this.Zflag);
         //console.log("Last ran: "+inst + ", with PC = after: "+ (this.PC  - 256));

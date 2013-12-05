@@ -37,9 +37,9 @@ function MemoryManager(){
 		            this.programsLoaded++
 		            //console.log(processBlock);
 
-		            var table = $("#tablePcb tbody").children()
+		            var table = $("#tablePcb tbody");
 		            var spaceFound = false;
-		            table.each(function(){
+		            table.children().each(function(){
 		            	//console.log("program array length: "+_MMU.programArray.length)
 		            	//console.log($(this.firstElementChild).text());
 		            	//console.log(spaceFound);
@@ -82,6 +82,7 @@ function MemoryManager(){
 			this.pidOnFile.push(this.programsLoaded);
 			this.programsLoaded++
 
+        	$("#tablePcb tbody").append("<tr><td id='pidRow'>"+processBlock.pid+"</td><td id='stateRow'>"+processBlock.state+"</td><td id='baseRow'>"+processBlock.baseIndex+"</td><td id='endRow'>"+processBlock.endIndex+"</td><td id='pcRow'>"+processBlock.PC+"</td></tr>")
 	    }
 	}
 

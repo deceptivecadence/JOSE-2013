@@ -36,7 +36,7 @@ function DeviceDriverFileSystem(){                     // Add or override specif
     }
 }
 
-//expect to receive params as follows[filename]
+//expect to receive params as follows[filename,operation,data,user|os]
 function createFile(params){
     if(checkFormat()){
         var filename = params[0].substr(0,60);
@@ -76,9 +76,13 @@ function createFile(params){
             _OsShell.putPrompt();
         }
         else{
-            _StdIn.putText("File Has Already Been Created!");
-            _StdIn.advanceLine();
-            _OsShell.putPrompt();
+            if(params[3]){//FROM OS
+
+            }else{
+                _StdIn.putText("File Has Already Been Created!");
+                _StdIn.advanceLine();
+                _OsShell.putPrompt();
+            }
         }
         /*
         var data = params[1];
@@ -173,7 +177,7 @@ function writeFile(params){
     }
     var fileFound = false;
     var sections = Math.ceil(data.length/60);
-    console.log(data)
+    //console.log(data)
     var dataSections = data.match(/.{1,60}/g) || [];
 
     var i = "001";
@@ -182,26 +186,28 @@ function writeFile(params){
             fileFound = true;
             var dataLocation = sessionStorage.getItem(i).split(FILE_DIVIDER)[0].substr(1);
             var linkEnds = false;
+
             while(sections>0){
-                var data = dataSections.shift()
-                var re = new RegExp("^.{"+data.length+"}")
+                var data = dataSections.shift();
+                var re = new RegExp("^.{"+data.length+"}");
+                var linkExists = sessionStorage.getItem(dataLocation).substring(1,4);
+
                 sessionStorage.setItem(dataLocation,"1---"+FILE_DIVIDER+FILE_FILLER);
                 var replacedData = sessionStorage.getItem(dataLocation).substring(5).replace(re,data);
+
                 if(sections === 1){
                     sessionStorage.setItem(dataLocation,"1---"+FILE_DIVIDER+replacedData);
                 }
                 else{
-                    var linkExists = sessionStorage.getItem(dataLocation).substring(1,4);
-                    console.log(linkExists)
                     if(isNaN(linkExists)){
                         nextDataSection = sessionStorage.getItem(MBR).substring(8,11);
+                        newDataSection = stringFormatAndInc(nextDataSection);
+                        sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(nextDataSection,newDataSection));
                     }
                     else{
                         nextDataSection = linkExists
                     }
-                    newDataSection = stringFormatAndInc(nextDataSection);
                     sessionStorage.setItem(dataLocation,"1"+nextDataSection+FILE_DIVIDER+replacedData);
-                    sessionStorage.setItem(MBR,sessionStorage.getItem(MBR).replace(nextDataSection,newDataSection));
                     dataLocation = nextDataSection;
                 }
                 sections--;
@@ -223,6 +229,7 @@ function writeFile(params){
             break;
         }
     }
+    updateMBR();
 }
 
 
@@ -262,8 +269,8 @@ function swapProcess(params){
     var oldProgram = params[0];
     var newProgram = params[2];
     readFile( ["program"+newProgram.pid, READ, "", FROM_OS]);
-    createFile(["program"+oldProgram.pid, CREATE]);
-    var pInMem = _MMU.memory.memoryArray.slice(oldProgram.baseIndex);
+    createFile(["program"+oldProgram.pid, CREATE,"",FROM_OS]);
+    var pInMem = _MMU.memory.memoryArray.splice(oldProgram.baseIndex,oldProgram.endIndex);
     writeFile(["program"+oldProgram.pid, WRITE, pInMem, FROM_OS]);
     _MMU.pidOnFile.push(oldProgram.pid);
     _MMU.pidOnFile.pop(newProgram.pid);
@@ -393,13 +400,17 @@ function updateMBR(){
 function stringFormatAndInc(integer){
     var newInt = parseInt(integer);
     newInt++;
-    if(newInt >= 100){
-        return ""+newInt
+    if(integer.substring(1,3) === "77" && newInt >= 100){
+        var hundreth = parseInt(integer.substring(0,1))++;
+        return ""+hundreth+"00";
+    }
+    else if(newInt >= 100){
+        return ""+newInt;
     }
     else if (newInt >= 10){
-        return "0"+newInt
+        return "0"+newInt;
     }
     else{
-        return "00"+newInt
+        return "00"+newInt;
     }
 }

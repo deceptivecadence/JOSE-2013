@@ -42,7 +42,7 @@ function CpuScheduler(){
             }
             console.log(DID_SWAP)
             if(DID_SWAP){
-            this.loadProgram(newProgram);
+                this.loadProgram(newProgram);
             }
         }
     }

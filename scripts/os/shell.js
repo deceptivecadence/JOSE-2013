@@ -599,6 +599,7 @@ function shellLPid(args){
 function shellRunAll(args){
 
     for(var i=0; i<_MMU.programArray.length; i++){
+        _MMU.programArray[i].resetVals();
         _ReadyQueue.enqueue(_MMU.programArray[i]);
     }
     _CPU.loadProgram(_ReadyQueue.dequeue());
@@ -613,7 +614,7 @@ function shellQuantum(args){
 }
 
 function shellCreate(args){
-    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],CREATE]) );
+    _KernelInterruptQueue.enqueue( new Interrupt(FILESYSTEM_IRQ, [args[0],CREATE,"",FROM_USER]) );
 }
 
 function shellRead(args){
